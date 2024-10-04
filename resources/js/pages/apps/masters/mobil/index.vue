@@ -184,11 +184,11 @@ import {
                 <td>
                   <VChip
                     label
-                    :color="resolveUserStatusVariant(mobil.status)"
+                    :color="resolveUserStatusVariant(mobil.is_rent)"
                     size="small"
                     class="text-capitalize"
                   >
-                    {{ mobil.status == 1 ? 'Tidak Tersedia' : 'Tersedia'}}
+                    {{ mobil.is_rent == 1 ? 'Tidak Tersedia' : 'Tersedia'}}
                   </VChip>
                 </td>
 
@@ -256,6 +256,7 @@ import {
     },
     mounted(){
       this.doSearch(1)
+      this.doGetMerekMobil()
     },
     data(){
       return {
@@ -263,7 +264,7 @@ import {
         filterRent:[
           {
             title: 'Tersedia',
-            value: 0,
+            value: 2,
           },
           {
             title: 'Tidak Tersedia',
@@ -319,8 +320,11 @@ import {
       'page.pageSize'(){
         this.doSearch(this.page.pageNo)
       },
-      'selectedStatus'(){
-        this.doSearch(this.page.pageNo)
+      'param_query.merek_mobil_id'(){
+        this.doSearch(1)
+      },
+      'param_query.is_rent'(){
+        this.doSearch(1)
       }
     },
     computed: {
@@ -332,6 +336,17 @@ import {
       }
     },
     methods: {
+      async doGetMerekMobil(){
+        this.loading = true
+        let uri = `/api/v1/mobils/combo`;
+        let responseBody = await api.jsonApi(uri,'GET');
+        if( responseBody.status != 200 ){
+          this.errorMessage = responseBody.message;
+        }else{
+          this.merek_mobil = responseBody.data.merek_mobil
+        }
+        this.loading = false
+      },
       doGetById(mobil_id){
 
       },
@@ -348,15 +363,15 @@ import {
         this.loading = true
         let param = `orderBy=${this.orderBy}&dir=${this.dir}&perPage=${this.page.pageSize}&page=${page}&status=${this.selectedStatus == null ? 1 : this.selectedStatus}`
 
-        if(this.param_query.merek_mobil_id != "" && this.param_query.merek_mobil_id != "null"){
+        if(this.param_query.merek_mobil_id != "" && this.param_query.merek_mobil_id != null){
           param += `&merek_mobil_id=${this.param_query.merek_mobil_id}`
         }
 
-        if(this.param_query.model != "" && this.param_query.model != "null"){
+        if(this.param_query.model != "" && this.param_query.model != null){
           param += `&model=${this.param_query.model}`
         }
 
-        if(this.param_query.is_rent != "" && this.param_query.is_rent != "null"){
+        if(this.param_query.is_rent != "" && this.param_query.is_rent != null){
           param += `&is_rent=${this.param_query.is_rent}`
         }
 
@@ -420,10 +435,10 @@ import {
       },
       resolveUserStatusVariant(stat){
         if(stat == 1){
-          return 'success'
+          return 'error'
         }
         
-        return 'danger'
+        return 'success'
       }
     },
   }

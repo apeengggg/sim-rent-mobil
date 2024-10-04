@@ -33,8 +33,8 @@ class MMobils extends Model
             $query = $query->whereRaw('LOWER(m.model) LIKE ?', ['%' . strtolower($param->model) . '%']);
         }
 
-        if($param->model){
-            $query = $query->where('m.is_rent', $param->is_rent);
+        if($param->is_rent){
+            $query = $query->where('m.is_rent', (int)$param->is_rent);
         }
 
         if($param->orderBy){
@@ -47,6 +47,13 @@ class MMobils extends Model
         }
         // $query = $query->groupBy('m.merek_mobil_id', 'm.merek_mobil', 'm.status');
 
+        // $sql = $query->toSql();
+
+        // Get the query bindings (parameters)
+        // $bindings = $query->getBindings();
+
+        // Display the raw SQL query with the parameters
+        // return vsprintf(str_replace('?', '%s', $sql), $bindings);
         return $query->paginate($param->perPage);
     }
 }

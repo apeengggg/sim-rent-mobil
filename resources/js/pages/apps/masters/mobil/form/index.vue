@@ -238,8 +238,6 @@ import {
           })
 
           this.merek_mobil = responseBody.data.merek_mobil
-
-          this.roles = responseBody.data;
         }
         this.loading = false
       },
@@ -353,7 +351,7 @@ import {
       },
     },
   }
-</script>Role
+</script>
 
 <style lang="scss">
 .app-user-search-filter {

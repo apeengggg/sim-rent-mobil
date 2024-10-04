@@ -42,7 +42,6 @@ class MobilApiController extends Controller
             $validator = Validator::make($request->all(), [
                 'merek_mobil_id' => 'max:100|string',
                 'model' => 'max:100|string',
-                'is_rent' => 'numeric|in:0,1',
                 'orderBy' => 'string|required|in:merek_mobil,merek_mobil_id',
                 'dir' => 'min:3|max:3|string|in:asc,desc|required',
                 'perPage' => 'numeric|required',
@@ -52,8 +51,6 @@ class MobilApiController extends Controller
                 'merek_mobil_id.string' => 'Merek Mobil Must Be String',
                 'model.max' => 'Model Maximal 100 Character',
                 'model.string' => 'Model Must Be String',
-                'is_rent.max' => 'Ketersediaan Must Be Numeric',
-                'is_rent.in' => 'Ketersediaan Not Allow',
                 'orderBy.string' => 'Order By Must Be String',
                 'orderBy.in' => 'Order Is Not Valid Column',
                 'orderBy.required' => 'Order is Required',
@@ -163,7 +160,7 @@ class MobilApiController extends Controller
                 'description' => $request->description,
                 'tarif' => $request->tarif,
                 'foto' => $base64_file,
-                'is_rent' => 0,
+                'is_rent' => 2,
                 'status' => 1,
                 'created_by' => $request->attributes->get('user_id')
             ];
