@@ -208,6 +208,18 @@ import {
                         icon="tabler-edit"
                       />
                     </VBtn>
+                    <VBtn
+                      icon
+                      size="x-small"
+                      color="default"
+                      variant="text"
+                      @click="doDelete(mobil.mobil_id)"
+                    >
+                      <VIcon
+                        size="22"
+                        icon="tabler-trash"
+                      />
+                    </VBtn>
                 </td>
               </tr>
             </tbody>
@@ -341,7 +353,8 @@ import {
         let uri = `/api/v1/mobils/combo`;
         let responseBody = await api.jsonApi(uri,'GET');
         if( responseBody.status != 200 ){
-          this.errorMessage = responseBody.message;
+          let msg = Array.isArray(responseBody.message) ? responseBody.message.toString() : responseBody.message;
+          this.errorMessage = msg
         }else{
           this.merek_mobil = responseBody.data.merek_mobil
         }
@@ -379,7 +392,8 @@ import {
         let responseBody = await api.jsonApi(uri,'GET');
         console.log("🚀 ~ doSearch ~ responseBody:", responseBody)
         if( responseBody.status != 200 ){
-          this.errorMessage = responseBody.message;
+          let msg = Array.isArray(responseBody.message) ? responseBody.message.toString() : responseBody.message;
+          this.errorMessage = msg
         }else{
           this.data = responseBody.data.data;
 
@@ -401,7 +415,7 @@ import {
           this.page.pageSize= responseBody.data.per_page
         }
       },
-      async doDelete(user_id){
+      async doDelete(mobil_id){
         Swal.fire({
           title: "Are you sure?",
           text: "You won't be able to revert this!",
@@ -416,19 +430,17 @@ import {
           }
       }).then(async (result) => {
           if (result.isConfirmed) {
-          //   this.loading = true
-          //   let uri = `/api/v1/users`;
-          //   let responseBody = await api.jsonApi(uri,'DELETE',JSON.stringify({userId: user_id}));
-            
-          //   if( responseBody.status != 200 ){
-          //     this.infoMessage = '';
-          //     this.warningMessage = '';
-          //     this.errorMessage = responseBody.message;
-          //   }else{
-          //     Swal.fire('Deleted!', responseBody.message, 'success')
-          //   }
-          //   this.loading = false
-          //   this.doSearch(1)
+            this.loading = true
+            let uri = `/api/v1/mobils`;
+            let responseBody = await api.jsonApi(uri,'DELETE',JSON.stringify({mobil_id: mobil_id}));
+            if( responseBody.status != 200 ){
+              let msg = Array.isArray(responseBody.message) ? responseBody.message.toString() : responseBody.message;
+              this.errorMessage = msg
+            }else{
+              this.successMessage = responseBody.message
+            }
+            this.loading = false
+            this.doSearch(1)
           }
         })
           

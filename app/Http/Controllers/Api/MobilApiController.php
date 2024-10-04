@@ -205,8 +205,36 @@ class MobilApiController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        try{
+            $validator = Validator::make($request->all(), [
+                'mobil_id' => 'max:100|string|required',
+            ],[
+                'mobil_id.max' => 'Mobil ID Maximal 100 Character',
+                'mobil_id.string' => 'Mobil ID Must Be String',
+                'mobil_id.required' => 'Mobil ID Is Required',
+            ]);
+    
+            //Send failed response if request is not valid
+            if ($validator->fails()) {
+                $errorMessages = StringUtil::ErrorMessage($validator);
+                return ResponseUtil::BadRequest($errorMessages);
+            }
+            
+            $mobil = MMobils::getMobilByMobilId($request->mobil_id);
+            if(!$mobil){
+                return ResponseUtil::BadRequest('Mobil Tidak Ditemukan!');
+            }
+
+            if($mobil->is_rent == 1){
+                return ResponseUtil::BadRequest('Mobil Sedang Masa Penyewaan!');
+            }
+            
+            MMobils::deleteMobil($request->mobil_id, $request->attributes->get('user_id'));
+            return ResponseUtil::Ok('Successfully Deleted', null);
+        }catch(\Exception $e){
+            return ResponseUtil::InternalServerError($e->getMessage());
+        }
     }
 }

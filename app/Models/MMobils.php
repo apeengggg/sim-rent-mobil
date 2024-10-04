@@ -15,8 +15,22 @@ class MMobils extends Model
         "created_at", "created_by", "updated_at", "updated_by"
     ];
 
+
+    public static function deleteMobil($mobil_id, $who){
+        return DB::table('m_mobils as m')->where('mobil_id', $mobil_id)
+                ->update([
+                    'status' => 0, 
+                    'updated_by' => $who,
+                    'updated_at' => date('Y-m-d H:i:s')
+                ]);
+    }
+
     public static function getMobilFromNoPlat($no_plat){
         return DB::table("m_mobils")->where("no_plat", $no_plat)->first();
+    }
+
+    public static function getMobilByMobilId($mobil_id){
+        return DB::table("m_mobils")->where("mobil_id", $mobil_id)->first();
     }
 
     public static function getAll($param){
@@ -45,15 +59,7 @@ class MMobils extends Model
 
             $query = $query->orderBy($param->orderBy, $dir);
         }
-        // $query = $query->groupBy('m.merek_mobil_id', 'm.merek_mobil', 'm.status');
 
-        // $sql = $query->toSql();
-
-        // Get the query bindings (parameters)
-        // $bindings = $query->getBindings();
-
-        // Display the raw SQL query with the parameters
-        // return vsprintf(str_replace('?', '%s', $sql), $bindings);
         return $query->paginate($param->perPage);
     }
 }
