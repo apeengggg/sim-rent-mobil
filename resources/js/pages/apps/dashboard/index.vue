@@ -167,3 +167,8 @@ const statisticsVertical = {
 <style lang="scss">
 @use "@core-scss/template/libs/apex-chart.scss";
 </style>
+
+<route lang="yaml">
+  meta:
+    requiresLogin: true
+</route>

@@ -224,6 +224,17 @@ export default {
 
         Swal.fire('Error!', msg, 'error')
       }else{
+        this.form = {
+          nama: '',
+          username: '',
+          no_telepon: '',
+          no_sim: '',
+          foto_sim: '',
+          foto_sim_file: '',
+          password: '',
+          confirmation_password: '',
+          alamat: '',
+        }
         Swal.fire('Success!', responseBody.message, 'success')
       }
       this.loading = false

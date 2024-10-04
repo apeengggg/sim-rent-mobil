@@ -138,6 +138,8 @@ class AuthController extends Controller
                 return ResponseUtil::BadRequest($errorMessages);
             }
 
+            $base64_file = null;
+
             if($request->hasFile('foto_sim_file')){
                 try{
                     $allowed_mime = ['image/jpg', 'image/jpeg', 'image/png'];
@@ -146,7 +148,10 @@ class AuthController extends Controller
                         return ResponseUtil::BadRequest('Failed Upload Foto SIM');
                     }
                     $fileName = $user_id . "_" . $file->getClientOriginalName();
-                    $path = $file->storeAs('foto_sim', $fileName, 'public');
+                    $mimeType = $file->getMimeType();
+                    $base64_file = base64_encode(file_get_contents($file->getRealPath()));
+                    $dataUrl = "data:{$mimeType};base64,{$base64_file}";
+                    $base64_file = $dataUrl;
                 }catch(\Exception $e){
                     return ResponseUtil::BadRequest('Failed Upload Foto SIM');
                 }
@@ -194,7 +199,7 @@ class AuthController extends Controller
                 'user_data_id' => Uuid::uuid4()->toString(),
                 'user_id' => $user_id,
                 'no_sim' => $request->no_sim,
-                'foto_sim' => $path,
+                'foto_sim' => $base64_file,
                 'created_by' => $user_id
             ];
 

@@ -1,6 +1,7 @@
 import { setupLayouts } from 'virtual:generated-layouts'
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from '~pages'
+console.log("🚀 ~ routes:", routes)
 import jwtDecode from 'jwt-decode';
 
 const router = createRouter({
@@ -52,11 +53,11 @@ function isAuthenticated() {
 // Docs: https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
 router.beforeEach((to, from, next) => {
   console.log("🚀 ~ router.beforeEach ~ to:", to)
-  // if (to.meta.requiresLogin && !isAuthenticated()) {
-  //   // If not authenticated, redirect to login page
-  //   return next({ name: 'apps-login'})
-  // }
-  // // // If authenticated or route doesn't require auth, proceed as normal
+  if (to.meta.requiresLogin && !isAuthenticated()) {
+    // If not authenticated, redirect to login page
+    return next({ name: 'apps-login'})
+  }
+  // // If authenticated or route doesn't require auth, proceed as normal
   next();
 })
 export default router
