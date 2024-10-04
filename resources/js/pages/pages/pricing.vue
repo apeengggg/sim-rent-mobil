@@ -393,3 +393,9 @@ const faqs = [
   }
 }
 </style>
+
+<route lang="yaml">
+  meta:
+    layout: blank
+  </route>
+  

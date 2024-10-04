@@ -14,6 +14,7 @@ class MUsers extends Migration
             $table->string('role_id', 100);
             $table->string('nama', 100);
             $table->string('username', 10)->unique();
+            $table->string('password', 255);
             $table->text('alamat');
             $table->string('telepon', 15);
             $table->string('no_sim', 20);

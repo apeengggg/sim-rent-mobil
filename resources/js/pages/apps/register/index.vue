@@ -1,16 +1,4 @@
-<script setup>
-import authV1BottomShape from '@images/svg/auth-v1-bottom-shape.svg'
-import authV1TopShape from '@images/svg/auth-v1-top-shape.svg'
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
-import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
-import { themeConfig } from '@themeConfig'
-
-const form = ref({
-  username: '',
-  email: '',
-  password: '',
-  privacyPolicies: false,
-})
+V<script setup>
 
 const isPasswordVisible = ref(false)
 </script>
@@ -33,7 +21,6 @@ const isPasswordVisible = ref(false)
       <!-- 👉 Auth card -->
       <VCard
         class="auth-card pa-4"
-        max-width="448"
       >
         <VCardItem class="justify-center">
           <template #prepend>
@@ -49,34 +36,61 @@ const isPasswordVisible = ref(false)
 
         <VCardText class="pt-2">
           <h5 class="text-h5 font-weight-semibold mb-1">
-            Adventure starts here 🚀
+            Daftar Pengguna Baru
           </h5>
-          <p class="mb-0">
-            Make your app management easy and fun!
-          </p>
         </VCardText>
 
         <VCardText>
-          <VForm @submit.prevent="() => {}">
+          <VForm @submit.prevent="doSave">
             <VRow>
               <!-- Username -->
-              <VCol cols="12">
+              <VCol cols="6">
+                <VTextField
+                  v-model="form.nama"
+                  label="Nama"
+                />
+              </VCol>
+
+              <VCol cols="6">
                 <VTextField
                   v-model="form.username"
                   label="Username"
                 />
               </VCol>
-              <!-- email -->
-              <VCol cols="12">
+
+              <VCol cols="6">
+                <VTextarea
+                  v-model="form.alamat"
+                  label="Alamat"
+                  rows="1"
+                  auto-grow
+                />
+              </VCol>
+
+              <VCol cols="6">
                 <VTextField
-                  v-model="form.email"
-                  label="Email"
-                  type="email"
+                  v-model="form.no_telepon"
+                  label="No. Telepon"
+                />
+              </VCol>
+
+              <VCol cols="6">
+                <VFileInput
+                  accept="image/*"
+                  v-model="form.foto_sim"
+                  label="Foto SIM"
+                />
+              </VCol>
+
+              <VCol cols="6">
+                <VTextField
+                  v-model="form.no_sim"
+                  label="No SIM"
                 />
               </VCol>
 
               <!-- password -->
-              <VCol cols="12">
+              <VCol cols="6">
                 <VTextField
                   v-model="form.password"
                   label="Password"
@@ -84,30 +98,25 @@ const isPasswordVisible = ref(false)
                   :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                   @click:append-inner="isPasswordVisible = !isPasswordVisible"
                 />
+              </VCol>
 
-                <div class="d-flex align-center mt-2 mb-4">
-                  <VCheckbox
-                    id="privacy-policy"
-                    v-model="form.privacyPolicies"
-                    inline
-                  />
-                  <VLabel
-                    for="privacy-policy"
-                    style="opacity: 1;"
-                  >
-                    <span class="me-1">I agree to</span>
-                    <a
-                      href="javascript:void(0)"
-                      class="text-primary"
-                    >privacy policy & terms</a>
-                  </VLabel>
-                </div>
-
+              <VCol cols="6">
+                <VTextField
+                  v-model="form.confirmation_password"
+                  label="Confirmation Password"
+                  :type="isPasswordVisible ? 'text' : 'password'"
+                  :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
+                  @click:append-inner="isPasswordVisible = !isPasswordVisible"
+                />
+              </VCol>
+              <VCol cols="6">
+              </VCol>
+              <VCol cols="6" class="d-flex justify-end">
                 <VBtn
                   block
                   type="submit"
                 >
-                  Sign up
+                  Daftar
                 </VBtn>
               </VCol>
 
@@ -116,30 +125,13 @@ const isPasswordVisible = ref(false)
                 cols="12"
                 class="text-center text-base"
               >
-                <span>Already have an account?</span>
+                <span>Sudah punya akun?</span>
                 <RouterLink
                   class="text-primary ms-2"
-                  :to="{ name: 'pages-authentication-login-v1' }"
+                  :to="{ name: 'apps-login' }"
                 >
-                  Sign in instead
+                  Login disini
                 </RouterLink>
-              </VCol>
-
-              <VCol
-                cols="12"
-                class="d-flex align-center"
-              >
-                <VDivider />
-                <span class="mx-4">or</span>
-                <VDivider />
-              </VCol>
-
-              <!-- auth providers -->
-              <VCol
-                cols="12"
-                class="text-center"
-              >
-                <AuthProvider />
               </VCol>
             </VRow>
           </VForm>
@@ -148,6 +140,75 @@ const isPasswordVisible = ref(false)
     </div>
   </div>
 </template>
+
+<script>
+// import
+import api from "@/apis/CommonAPI"
+import Swal from 'sweetalert2'
+import authV1BottomShape from '@images/svg/auth-v1-bottom-shape.svg'
+import authV1TopShape from '@images/svg/auth-v1-top-shape.svg'
+import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
+import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
+import { themeConfig } from '@themeConfig'
+
+export default {
+  components: {
+    themeConfig,
+    VNodeRenderer,
+    authV1BottomShape,
+    authV1TopShape,
+    AuthProvider
+  },
+  created(){
+  },
+  mounted(){
+    localStorage.removeItem('token')
+    localStorage.removeItem('user_data')
+    localStorage.removeItem('userAbilities')
+  },
+  data(){
+    return{
+      form: {
+        email: '',
+        password: '',
+        remember: '',
+      },
+      isPasswordVisible: false,
+      loading: false,
+    }
+  },
+  methods: {
+    async login(){
+      this.loading = true
+
+      let uri = `/api/v1/auth/login`;
+      let responseBody = await api.jsonApi(uri,'POST', JSON.stringify(this.form));
+      console.log('Message', Array.isArray(responseBody.message))
+      if( responseBody.status != 200 ){
+        let msg = ''
+        if(Array.isArray(responseBody.message)){
+          msg = responseBody.message.toString()
+        }else{
+          msg = responseBody.message
+        }
+
+        Swal.fire('Error!', msg, 'error')
+      }else{
+        localStorage.setItem('user_data', JSON.stringify(responseBody.data))
+        localStorage.setItem('token', responseBody.data.token)
+        this.$router.push('/apps/masters/users');
+      }
+      this.loading = false
+    }
+  },
+  watch: {
+
+  },
+  computed: {
+
+  }
+}
+</script>
 
 <style lang="scss">
 @use "@core-scss/template/pages/page-auth.scss";
