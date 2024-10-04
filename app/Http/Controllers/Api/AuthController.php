@@ -32,13 +32,13 @@ class AuthController extends Controller
     {
         try{
             $validator = Validator::make($request->all(), [
-                'email' => 'required|email'  ,
-                'password' => 'required|string|min:4'
+                'username' => 'required|string',
+                'password' => 'required|string|min:5'
             ],[
-                'email.required' => 'Email is Required',
+                'username.required' => 'Username is Required',
                 'password.required' => 'Password is Required',
                 'password.string' => 'Password Must Be String',
-                'password.min' => 'Password Must Be At Least 8 Character'
+                'password.min' => 'Password Must Be At Least 5 Character'
             ]);
     
             //Send failed response if request is not valid
@@ -47,7 +47,7 @@ class AuthController extends Controller
                 return ResponseUtil::BadRequest($errorMessages);
             }
 
-            $results = MUsers::getUserFromEmail($request->email);
+            $results = MUsers::getUserFromUsername($request->username);
             if($results == null){
                 return ResponseUtil::Unauthorized("Login failed, either your User Id isn't registered in our system or your password is incorrect");
             }
@@ -57,13 +57,13 @@ class AuthController extends Controller
                 return ResponseUtil::Unauthorized("Login failed, either your User Id isn't registered in our system or your password is incorrect");
             }
             
-            $permission = MPermissions::getPermissionById($results->role_id);
-            // echo $permission;
-            if(!$permission){
-                return ResponseUtil::Unauthorized("Login failed, either your User Id isn't registered in our system or your password is incorrect");
-            }
+            // $permission = MPermissions::getPermissionById($results->role_id);
+            // // echo $permission;
+            // if(!$permission){
+            //     return ResponseUtil::Unauthorized("Login failed, either your User Id isn't registered in our system or your password is incorrect");
+            // }
             
-            $object_permission = PermissionUtil::createObjectPermission($permission);
+            // $object_permission = PermissionUtil::createObjectPermission($permission);
             
             $payload_data = [
                 'user_id' => $results->user_id,
@@ -72,17 +72,18 @@ class AuthController extends Controller
             
             $results = [
                 'user_id' => $results->user_id,
-                'name' => $results->name,
-                'foto_profile' => env('APP_URL').'/storage/'.$results->photo,
+                'name' => $results->nama,
+                // 'foto_profile' => env('APP_URL').'/storage/'.$results->photo,
                 'role_id' => $results->role_id,
                 'role_name' => $results->role_name,
-                'permission' => $object_permission,
+                // 'permission' => $object_permission,
                 'token' => $this->jwtUtil->generateToken($payload_data, $results->role_id),
             ];
 
 
             return ResponseUtil::Ok("Successfully Login", $results);
         }catch(\Exception $e){
+            dd($e);
             return ResponseUtil::InternalServerError($e);
         }
     }

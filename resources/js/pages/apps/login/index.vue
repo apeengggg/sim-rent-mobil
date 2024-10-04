@@ -64,12 +64,11 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
         <VCardText>
           <VForm @submit.prevent="() => login()">
             <VRow>
-              <!-- email -->
               <VCol cols="12">
                 <VTextField
-                  v-model="form.email"
-                  label="Email"
-                  type="email"
+                  v-model="form.username"
+                  label="Username"
+                  type="text"
                 />
               </VCol>
 
@@ -156,7 +155,7 @@ export default {
   data(){
     return{
       form: {
-        email: '',
+        username: '',
         password: '',
         remember: '',
       },
@@ -170,7 +169,7 @@ export default {
 
       let uri = `/api/v1/auth/login`;
       let responseBody = await api.jsonApi(uri,'POST', JSON.stringify(this.form));
-      console.log('Message', Array.isArray(responseBody.message))
+      console.log("🚀 ~ login ~ responseBody:", responseBody)
       if( responseBody.status != 200 ){
         let msg = ''
         if(Array.isArray(responseBody.message)){
@@ -183,7 +182,7 @@ export default {
       }else{
         localStorage.setItem('user_data', JSON.stringify(responseBody.data))
         localStorage.setItem('token', responseBody.data.token)
-        this.$router.push('/apps/masters/users');
+        this.$router.push('/apps/dashboard');
       }
       this.loading = false
     }

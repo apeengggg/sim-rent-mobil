@@ -15,11 +15,11 @@ class MUsers extends Model
         "created_at", "created_by", "updated_at", "updated_by"
     ];
 
-    public static function getUserFromEmail($email){
+    public static function getUserFromUsername($username){
         return DB::table('m_users as u')
         ->join('m_roles as r', 'u.role_id', '=', 'r.role_id')
-        ->select('u.user_id', 'u.name', 'u.email', 'u.password', 'u.role_id', 'r.role_name', 'u.photo')
-        ->where('u.email', $email)
+        ->select('u.user_id', 'u.nama', 'u.username', 'u.password', 'u.role_id', 'r.role_name')
+        ->where('u.username', $username)
         ->first();
     } 
 

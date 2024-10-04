@@ -6,4 +6,4 @@ import others from './others'
 import uiElements from './ui-elements'
 import masters from './masters'
 
-export default [...masters, ...dashboard, ...appAndPages, ...uiElements, ...forms, ...charts, ...others]
+export default [...dashboard, ...masters, ...appAndPages, ...uiElements, ...forms, ...charts, ...others]
