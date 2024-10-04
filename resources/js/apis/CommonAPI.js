@@ -40,7 +40,7 @@ export default {
     async uploadPostApi( uri, formData){
         return this.execPostUploadApi(import.meta.env.VITE_APP_URL + uri, formData);
     },
-
+    
     async execJsonApi( uri, method, jsonBody){
         try{
         let payload = {
@@ -102,15 +102,18 @@ export default {
           utils.error(await utils.message('MSGCMN0001',[uri,e.message]));
         }
       },
-
+    
+    async uploadApi( uri, method, formData){
+      return this.execUploadApi(import.meta.env.VITE_APP_URL + uri, method, formData);
+    },
       
-    async execPostUploadApi( uri, formData){
+    async execPostUploadApi(uri, formData){
         try{
             let response = await axios.post(uri, formData, {
-                "Authorization": 'Bearer ' + localStorage.token,
+                'Authorization': 'Bearer ' + localStorage.token,
                 'Content-Type': 'multipart/form-data',
             })
-            console.log("🚀 ~ execUploadApi ~ response:", response)
+            
           let jsonResponse = await response.data;
           return jsonResponse;
         }catch(e){  
@@ -118,4 +121,21 @@ export default {
           utils.error(await utils.message('MSGCMN0001',[uri,e.message]));
         }
     },
+
+    async execUploadApi( uri, method, formData){
+      try{
+        let response = await fetch( uri, {
+            method: method, // *GET, POST, PUT, DELETE, etc.
+            headers: {
+              "Authorization": 'Bearer ' + localStorage.token,
+            },
+            body: formData
+        });
+        let jsonResponse = await response.json();
+        console.log("🚀 ~ execUploadApi ~ jsonResponse:", jsonResponse)
+        return jsonResponse;
+      }catch(e){        
+        utils.error(await utils.message('MSGCMN0001',[uri,e.message]));
+      }
+  },
 }

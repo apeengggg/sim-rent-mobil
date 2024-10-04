@@ -15,6 +15,13 @@ class MMerekMobils extends Model
         "created_at", "created_by", "updated_at", "updated_by"
     ];
 
+    public static function getAllCombo(){
+        return DB::table('m_merek_mobils as mm')
+        ->select('mm.merek_mobil_id as value', 'mm.merek_mobil as title')
+        ->where('mm.status', 1)
+        ->get();
+    }
+
     public static function getMerekMobilsName($merek_mobil, $merek_mobil_id = null){
         $query =DB::table('m_merek_mobils as mm')
         ->select('mm.merek_mobil')
@@ -56,10 +63,6 @@ class MMerekMobils extends Model
 
         $query = $query->groupBy('mm.merek_mobil_id', 'mm.merek_mobil', 'mm.status');
 
-        // dd($query->toSql());
-
         return $query->paginate($param->perPage);
-
-        
     }
 }

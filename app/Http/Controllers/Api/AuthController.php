@@ -96,9 +96,6 @@ class AuthController extends Controller
     {
         try{
             $user_id =  Uuid::uuid4()->toString();
-            if (!Storage::disk('public')->exists('foto-profile')) {
-                Storage::disk('public')->makeDirectory('foto-profile');
-            }
 
             $validator = Validator::make($request->all(), [
                 'nama' => 'max:100|string|required',

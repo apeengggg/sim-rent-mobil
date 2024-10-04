@@ -1,7 +1,6 @@
 import { setupLayouts } from 'virtual:generated-layouts'
 import { createRouter, createWebHistory } from 'vue-router'
 import routes from '~pages'
-console.log("🚀 ~ routes:", routes)
 import jwtDecode from 'jwt-decode';
 
 const router = createRouter({

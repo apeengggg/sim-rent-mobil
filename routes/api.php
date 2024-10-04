@@ -37,6 +37,7 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware(['auth.filter'])->prefix('mobils')->group(function () {
         Route::get('/', [MobilApiController::class, 'index']);
+        Route::get('/combo', [MobilApiController::class, 'comboAdd']);
         Route::get('/{id}', [MobilApiController::class, 'getById']);
         Route::post('/', [MobilApiController::class, 'store']);
         Route::put('/', [MobilApiController::class, 'update']);
