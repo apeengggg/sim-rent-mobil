@@ -33,7 +33,7 @@ class MUsers extends Model
     public static function getUserFromUserId($user_id){
         return DB::table('m_users as u')
         ->join('m_roles as r', 'u.role_id', '=', 'r.role_id')
-        ->select('u.user_id', 'u.name', 'u.email', 'u.password', 'u.role_id', 'r.role_name', 'u.photo', 'u.nip', 'u.phone')
+        ->select('u.user_id', 'u.nama', 'u.username', 'u.password', 'u.role_id', 'r.role_name', 'u.telepon')
         ->where('u.user_id', $user_id)
         ->first();
     }

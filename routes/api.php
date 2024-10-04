@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\MerekMobilApiController;
+use App\Http\Controllers\Api\MobilApiController;
 use App\Http\Controllers\Api\RoleApiController;
 use App\Http\Controllers\Api\UserApiController;
 /*
@@ -24,6 +26,21 @@ Route::prefix('v1')->group(function () {
         Route::post('/', [UserApiController::class, 'store']);
         Route::put('/', [UserApiController::class, 'update']);
         Route::delete('/', [UserApiController::class, 'destroy']);
+    });
+
+    Route::middleware(['auth.filter'])->prefix('merek-mobils')->group(function () {
+        Route::get('/', [MerekMobilApiController::class, 'index']);
+        Route::get('/{id}', [MerekMobilApiController::class, 'getById']);
+        Route::post('/', [MerekMobilApiController::class, 'store']);
+        Route::put('/', [MerekMobilApiController::class, 'update']);
+    });
+
+    Route::middleware(['auth.filter'])->prefix('mobils')->group(function () {
+        Route::get('/', [MobilApiController::class, 'index']);
+        Route::get('/{id}', [MobilApiController::class, 'getById']);
+        Route::post('/', [MobilApiController::class, 'store']);
+        Route::put('/', [MobilApiController::class, 'update']);
+        Route::delete('/', [MobilApiController::class, 'destroy']);
     });
 
     Route::prefix('roles')->group(function () {

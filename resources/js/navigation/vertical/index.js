@@ -5,5 +5,6 @@ import forms from './forms'
 import others from './others'
 import uiElements from './ui-elements'
 import masters from './masters'
+import master_mobil from './master-mobil'
 
-export default [...dashboard, ...masters, ...appAndPages, ...uiElements, ...forms, ...charts, ...others]
+export default [...dashboard, ...masters, ...master_mobil]

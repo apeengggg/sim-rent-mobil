@@ -118,34 +118,4 @@ export default {
           utils.error(await utils.message('MSGCMN0001',[uri,e.message]));
         }
     },
-
-    async execRefreshToken(method){
-        try{
-            let response = await fetch(process.env.VUE_APP_SC_API_URL+'/api/authenticate', {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json',
-                    "Authorization": 'Bearer ' + localStorage.token,
-                },
-                body: JSON.stringify({
-                    userName: process.env.VUE_APP_SC_REFRESH_TOKEN_USERNAME,
-                    password: process.env.VUE_APP_SC_REFRESH_TOKEN_PASSWORD
-                })
-            } );
-            let jsonResponse = await response.json();
-            console.log('jsonResponse', jsonResponse)
-            if(jsonResponse.status==='401'){
-                localStorage.token = '';
-                localStorage.tokenId = '';
-                window.location.href=process.env.VUE_APP_CONTAINER_URL;  
-                return;
-            }
-            localStorage.setItem('token', jsonResponse.token)
-            localStorage.setItem('tokenId', jsonResponse.token)
-            // await callback()
-            return jsonResponse;
-            }catch(e){       
-                utils.error(await utils.message('MSGCMN0001',[process.env.VUE_APP_SC_API_URL+'/api/authenticate',e.message]));
-            }
-    },
 }

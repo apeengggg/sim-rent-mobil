@@ -51,7 +51,7 @@ class AuthFilter
             if($user && $user->role_id != $data->role_id){
                 return ResponseUtil::Unauthorized('Token is not valid because role has been changed');
             }else if($user){
-                $request->attributes->set('name', $user->name);
+                $request->attributes->set('nama', $user->nama);
                 $request->attributes->set('user_id', $user->user_id);
                 $request->attributes->set('role_id', $user->role_id);
                 return $next($request);
@@ -59,7 +59,7 @@ class AuthFilter
                 return ResponseUtil::Unauthorized('User does not exist anymore');
             }
         } catch (\Exception $e) {
-            return ResponseUtil::Unauthorized('Token is not valid');
+            return ResponseUtil::Unauthorized($e->getMessage());
         }
     }
 }

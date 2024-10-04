@@ -441,5 +441,21 @@ export default {
 
         reader.readAsDataURL(file); // This method reads the file as a data URL (Base64)
     });
-}
+  },
+  alertConfirm(title, msg, icon, callback) {
+    Swal.fire({
+      title: title,
+      text: msg,
+      icon: icon,
+      confirmButtonColor: "#7367F0",
+      confirmButtonText: "Yes",
+      customClass: {
+        confirmButton: 'confirm-button-text-white',
+      }
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+          callback()
+        }
+      })
+    }
 }

@@ -148,6 +148,7 @@ import { themeConfig } from '@themeConfig'
 // import
 import api from "@/apis/CommonAPI"
 import Swal from 'sweetalert2'
+import utils from "@/utils/CommonUtils"
 
 export default {
   components: {},
@@ -224,18 +225,19 @@ export default {
 
         Swal.fire('Error!', msg, 'error')
       }else{
-        this.form = {
-          nama: '',
-          username: '',
-          no_telepon: '',
-          no_sim: '',
-          foto_sim: '',
-          foto_sim_file: '',
-          password: '',
-          confirmation_password: '',
-          alamat: '',
-        }
-        Swal.fire('Success!', responseBody.message, 'success')
+        utils.alertConfirm('Success!', responseBody.message, 'success', () => {
+          this.form = {
+            nama: '',
+            username: '',
+            no_telepon: '',
+            no_sim: '',
+            foto_sim: '',
+            foto_sim_file: '',
+            password: '',
+            confirmation_password: '',
+            alamat: '',
+          }
+        })
       }
       this.loading = false
     }
