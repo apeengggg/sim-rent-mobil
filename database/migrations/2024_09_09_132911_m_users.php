@@ -17,8 +17,6 @@ class MUsers extends Migration
             $table->string('password', 255);
             $table->text('alamat');
             $table->string('telepon', 15);
-            $table->string('no_sim', 20);
-            $table->text('sim');
             $table->integer('status')->default(1);
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('created_by', 100);

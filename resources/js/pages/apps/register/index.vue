@@ -1,6 +1,8 @@
-V<script setup>
-
-const isPasswordVisible = ref(false)
+<script setup>
+import authV1BottomShape from '@images/svg/auth-v1-bottom-shape.svg'
+import authV1TopShape from '@images/svg/auth-v1-top-shape.svg'
+import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
+import { themeConfig } from '@themeConfig'
 </script>
 
 <template>
@@ -41,7 +43,7 @@ const isPasswordVisible = ref(false)
         </VCardText>
 
         <VCardText>
-          <VForm @submit.prevent="doSave">
+          <VForm @submit.prevent="doSave($event)">
             <VRow>
               <!-- Username -->
               <VCol cols="6">
@@ -76,9 +78,10 @@ const isPasswordVisible = ref(false)
 
               <VCol cols="6">
                 <VFileInput
-                  accept="image/*"
+                  accept="image/jpg, image/png, image/jpeg"
                   v-model="form.foto_sim"
                   label="Foto SIM"
+                  @input="handleFileUpload($event)"
                 />
               </VCol>
 
@@ -145,20 +148,9 @@ const isPasswordVisible = ref(false)
 // import
 import api from "@/apis/CommonAPI"
 import Swal from 'sweetalert2'
-import authV1BottomShape from '@images/svg/auth-v1-bottom-shape.svg'
-import authV1TopShape from '@images/svg/auth-v1-top-shape.svg'
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
-import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
-import { themeConfig } from '@themeConfig'
 
 export default {
-  components: {
-    themeConfig,
-    VNodeRenderer,
-    authV1BottomShape,
-    authV1TopShape,
-    AuthProvider
-  },
+  components: {},
   created(){
   },
   mounted(){
@@ -169,21 +161,59 @@ export default {
   data(){
     return{
       form: {
-        email: '',
+        nama: '',
+        username: '',
+        no_telepon: '',
+        no_sim: '',
+        foto_sim: '',
+        foto_sim_file: '',
         password: '',
-        remember: '',
+        confirmation_password: '',
+        alamat: '',
       },
       isPasswordVisible: false,
       loading: false,
+      allowed_mime_type: ['image/jpg', 'image/jpeg', 'image/png']
     }
   },
   methods: {
-    async login(){
+    handleFileUpload(e){
+      const file = e.target.files[0];
+      console.log("🚀 ~ handleFileUpload ~ file:", file)
+      if(file.size > 1048576){
+        this.form.foto_sim = ''
+        return Swal.fire('Error!', 'Foto SIM Max 1 MB')
+      }
+      
+      if(!this.allowed_mime_type.includes(file.type)){
+        this.form.foto_sim = ''
+        return Swal.fire('Error!', 'Foto SIM Must JPEG, JPG, or PNG')
+      }
+
+      this.form.foto_sim_file = file
+      console.log("🚀 ~ handleFileUpload ~ this.foto_sim_file:", this.form.foto_sim_file)
+    },
+    async doSave(event){
       this.loading = true
 
-      let uri = `/api/v1/auth/login`;
-      let responseBody = await api.jsonApi(uri,'POST', JSON.stringify(this.form));
-      console.log('Message', Array.isArray(responseBody.message))
+      if(this.form.password != this.form.confirmation_password){
+        Swal.fire('Error!', 'Password dan konfirmasi password tidak cocok', 'error')
+      }
+
+      let form = new FormData()
+      form.append("nama", this.form.nama)
+      form.append("username", this.form.username)
+      form.append("no_telepon", this.form.no_telepon)
+      form.append("no_sim", this.form.no_sim)
+      form.append("foto_sim_file", this.form.foto_sim_file)
+      form.append("password", this.form.password)
+      form.append("alamat", this.form.alamat)
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      let uri = `/api/v1/auth/register`;
+      let responseBody = await api.uploadPostApi(uri, form);
       if( responseBody.status != 200 ){
         let msg = ''
         if(Array.isArray(responseBody.message)){
@@ -194,9 +224,7 @@ export default {
 
         Swal.fire('Error!', msg, 'error')
       }else{
-        localStorage.setItem('user_data', JSON.stringify(responseBody.data))
-        localStorage.setItem('token', responseBody.data.token)
-        this.$router.push('/apps/masters/users');
+        Swal.fire('Success!', responseBody.message, 'success')
       }
       this.loading = false
     }

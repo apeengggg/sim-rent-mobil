@@ -11,7 +11,7 @@ class MUsers extends Model
     use HasFactory;
     protected $primaryKey = "user_id";
     protected $fillable = [
-        "user_id", "role_id", "nip", "name", "email", "phone", "password", "status", "photo",
+        "user_id", "role_id", "nama", "username", "password", "alamat", "telepon", "status",
         "created_at", "created_by", "updated_at", "updated_by"
     ];
 
@@ -20,6 +20,13 @@ class MUsers extends Model
         ->join('m_roles as r', 'u.role_id', '=', 'r.role_id')
         ->select('u.user_id', 'u.nama', 'u.username', 'u.password', 'u.role_id', 'r.role_name')
         ->where('u.username', $username)
+        ->first();
+    } 
+
+    public static function getUserFromPhoneNumber($no_telepon){
+        return DB::table('m_users as u')
+        ->select('u.user_id', 'u.telepon')
+        ->where('u.telepon', $no_telepon)
         ->first();
     } 
 

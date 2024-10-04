@@ -24,102 +24,6 @@ export default {
             })
         return request
     },
-
-    async get(url, params, callback) {
-        let config = {
-            headers: { 
-                Authorization: 'Bearer ' + localStorage.token,
-            },
-        }
-
-        let detailUrl = url
-        if(params == '?'){
-            detailUrl = process.env.VUE_APP_API_URL + `${url}`
-        }else{
-            detailUrl = process.env.VUE_APP_API_URL + `${url}`
-        }
-        const request = axios
-            .get(detailUrl, config)
-            .then((response) => {
-                if (callback) {
-                    return callback(response, null)
-                }
-                return response
-            })
-            .catch((error) => {
-                if (callback) {
-                    return callback(error.response, error)
-                }
-                return error
-            })
-        return request
-    },
-
-    async post(url, params, callback) {
-        const request = await axios
-            .post(process.env.VUE_APP_API_URL + `${url}`, params, {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.token,
-                },
-            })
-            .then((response) => {
-                if (callback) {
-                    return callback(response, null)
-                }
-                return response
-            })
-            .catch((error) => {
-                if (callback) {
-                    return callback(error.response, error)
-                }
-                return error
-            })
-        return request
-    },
-
-    async put(url, id, params, callback) {
-        const request = await axios
-            .put(process.env.VUE_APP_API_URL + `${url}/edit/${id}`, params, {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.token,
-                },
-            })
-            .then((response) => {
-                if (callback) {
-                    return callback(response, null)
-                }
-                return response
-            })
-            .catch((error) => {
-                if (callback) {
-                    return callback(error.response, error)
-                }
-                return error
-            })
-        return request
-    },
-    
-    async delete(url, id, callback) {
-        const request = await axios
-            .delete(process.env.VUE_APP_API_URL + `${url}/delete/${id}`, {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.token,
-                },
-            })
-            .then((response) => {
-                if (callback) {
-                    return callback(response, null)
-                }
-                return response
-            })
-            .catch((error) => {
-                if (callback) {
-                    return callback(error.response, error)
-                }
-                return error
-            })
-        return request
-    },
     
     async cmnNodeJsonApi( uri, method, jsonBody){
         return this.execJsonApi(process.env.VUE_APP_CMN_NODE_API_URL + uri, method, jsonBody);
@@ -133,8 +37,8 @@ export default {
         return await this.execDownloadApi( process.env.VUE_APP_API_URL + uri, method, data);
     },
 
-    async uploadApi( uri, method, formData){
-        return this.execUploadApi(import.meta.env.VITE_APP_URL + uri, method, formData);
+    async uploadPostApi( uri, formData){
+        return this.execPostUploadApi(import.meta.env.VITE_APP_URL + uri, formData);
     },
 
     async execJsonApi( uri, method, jsonBody){
@@ -200,18 +104,17 @@ export default {
       },
 
       
-    async execUploadApi( uri, method, formData){
+    async execPostUploadApi( uri, formData){
         try{
-          let response = await fetch( uri, {
-              method: method, // *GET, POST, PUT, DELETE, etc.
-              headers: {
+            let response = await axios.post(uri, formData, {
                 "Authorization": 'Bearer ' + localStorage.token,
-              },
-              body: formData
-          });
-          let jsonResponse = await response.json();
+                'Content-Type': 'multipart/form-data',
+            })
+            console.log("🚀 ~ execUploadApi ~ response:", response)
+          let jsonResponse = await response.data;
           return jsonResponse;
-        }catch(e){        
+        }catch(e){  
+          alert(e.message)      
           utils.error(await utils.message('MSGCMN0001',[uri,e.message]));
         }
     },

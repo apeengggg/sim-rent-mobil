@@ -5,13 +5,17 @@ namespace App\Http\Controllers\api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\MUsers;
-use App\Models\MPermissions;
+use App\Models\MRoles;
+use App\Models\MUserDatas;
 use App\Utils\ResponseUtil;
-use App\Utils\PermissionUtil;
 use Illuminate\Support\Facades\Hash;
 use App\Utils\JwtUtil;
 use App\Utils\StringUtil;
 use Illuminate\Support\Facades\Validator;
+use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+
 
 class AuthController extends Controller
 {
@@ -88,15 +92,121 @@ class AuthController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function register(Request $request)
     {
-        //
+        try{
+            $user_id =  Uuid::uuid4()->toString();
+            if (!Storage::disk('public')->exists('foto-profile')) {
+                Storage::disk('public')->makeDirectory('foto-profile');
+            }
+
+            $validator = Validator::make($request->all(), [
+                'nama' => 'max:100|string|required',
+                'username' => 'max:10|string|required',
+                'alamat' => 'string|required',
+                'no_telepon' => 'max:13|string|required',
+                'foto_sim_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:1024',
+                'no_sim' => 'required|string|min:16|max:16',
+                'password' => 'required|string|min:8',
+            ],[
+                'nama.max' => 'Nama Maximal 100 Character',
+                'nama.string' => 'Nama Must Be String',
+                'nama.required' => 'Nama Is Required',
+                'alamat.string' => 'Alamat Must Be String',
+                'alamat.required' => 'Alamat Is Required',
+                'username.max' => 'Username Maximal 10 Character',
+                'username.string' => 'Username Must Be String',
+                'username.required' => 'Username Is Required',
+                'no_telepon.max' => 'No Telepon Maximal 13 Character',
+                'no_telepon.string' => 'No Telepon Must Be A String',
+                'no_telepon.required' => 'No Telepon Is Required',
+                'foto_sim_file.required' => 'Foto SIM Is Required',
+                'foto_sim_file.file' => 'Foto SIM Is Must Be A File',
+                'foto_sim_file.mimes' => 'Foto SIM Not Allowed File Format',
+                'foto_sim_file.max' => 'Foto SIM Max Size 1 MB',
+                'password.required' => 'Password Is Required',
+                'password.min' => 'Password Minimal 8 Character',
+                'password.string' => 'Password Must Be A String',
+                'no_sim.required' => 'No SIM Is Required',
+                'no_sim.string' => 'No SIM Must Be A String',
+                'no_sim.max' => 'No SIM Must Be 16 Character',
+                'no_sim.min' => 'No SIM Must Be 16 Character',
+            ]);
+
+            if ($validator->fails()) {
+                $errorMessages = StringUtil::ErrorMessage($validator);
+                return ResponseUtil::BadRequest($errorMessages);
+            }
+
+            if($request->hasFile('foto_sim_file')){
+                try{
+                    $allowed_mime = ['image/jpg', 'image/jpeg', 'image/png'];
+                    $file = $request->file('foto_sim_file');
+                    if($file->getSize() > 1048576 || !in_array($file->getMimeType(), $allowed_mime)){
+                        return ResponseUtil::BadRequest('Failed Upload Foto SIM');
+                    }
+                    $fileName = $user_id . "_" . $file->getClientOriginalName();
+                    $path = $file->storeAs('foto_sim', $fileName, 'public');
+                }catch(\Exception $e){
+                    return ResponseUtil::BadRequest('Failed Upload Foto SIM');
+                }
+            }
+
+            $path = 'foto_sim/'.$fileName;
+
+            $validatePhoneNumberFormat = StringUtil::validateIndonesianPhoneNumber($request->no_telepon);
+            if(!$validatePhoneNumberFormat){
+                return ResponseUtil::BadRequest('Phone Number is Not Valid');
+            }
+
+            $validateUsername = MUsers::getUserFromUsername($request->username);
+            if($validateUsername){
+                return ResponseUtil::BadRequest('Username is exists');
+            }
+
+            $validatePhoneNumber = MUsers::getUserFromPhoneNumber($request->no_telepon);
+            if($validatePhoneNumber){
+                return ResponseUtil::BadRequest('Phone Number is exists');
+            }
+
+            $role = MRoles::getUserRoleId();
+            if(!$role){
+                return ResponseUtil::BadRequest('Role User Not Found');
+            }
+
+            $role_id = $role->role_id;
+
+            DB::beginTransaction();
+
+            $data = [
+                'user_id' => $user_id,
+                'role_id' => $role_id,
+                'nama' => $request->nama,
+                'alamat' => $request->alamat,
+                'username' => $request->username,
+                'telepon' => $request->no_telepon,
+                'password' => bcrypt($request->password),
+                'status' => 1,
+                'created_by' => $user_id
+            ];
+
+            $data_user = [
+                'user_data_id' => Uuid::uuid4()->toString(),
+                'user_id' => $user_id,
+                'no_sim' => $request->no_sim,
+                'foto_sim' => $path,
+                'created_by' => $user_id
+            ];
+
+            MUsers::create($data);
+            MUserDatas::create($data_user);
+
+            DB::commit();
+            return ResponseUtil::Ok('Successfully created', null);
+        }catch(\Exception $e){
+            DB::rollback();
+            return ResponseUtil::InternalServerError($e->getMessage());
+        }
     }
 
     /**

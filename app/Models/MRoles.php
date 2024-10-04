@@ -20,4 +20,11 @@ class MRoles extends Model
         ->select('r.role_id as value', 'r.role_name as title')
         ->get();
     } 
+
+    public static function getUserRoleId(){
+        return DB::table('m_roles as r')
+        ->select('r.role_id', 'r.role_name')
+        ->where('r.role_name', 'User')
+        ->first();
+    }
 }
