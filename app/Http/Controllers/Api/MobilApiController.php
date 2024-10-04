@@ -36,9 +36,49 @@ class MobilApiController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        try{
+            $validator = Validator::make($request->all(), [
+                'merek_mobil_id' => 'max:100|string',
+                'model' => 'max:100|string',
+                'is_rent' => 'numeric|in:0,1',
+                'orderBy' => 'string|required|in:merek_mobil,merek_mobil_id',
+                'dir' => 'min:3|max:3|string|in:asc,desc|required',
+                'perPage' => 'numeric|required',
+                'status' => 'numeric|in:1,0',
+            ],[
+                'merek_mobil_id.max' => 'Merek Mobil Maximal 100 Character',
+                'merek_mobil_id.string' => 'Merek Mobil Must Be String',
+                'model.max' => 'Model Maximal 100 Character',
+                'model.string' => 'Model Must Be String',
+                'is_rent.max' => 'Ketersediaan Must Be Numeric',
+                'is_rent.in' => 'Ketersediaan Not Allow',
+                'orderBy.string' => 'Order By Must Be String',
+                'orderBy.in' => 'Order Is Not Valid Column',
+                'orderBy.required' => 'Order is Required',
+                'dir.min' => 'Dir Minimal 3 Character',
+                'dir.max' => 'Dir Maximal 3 Character',
+                'dir.string' => 'Dir Must Be String',
+                'dir.in' => 'Dir Value Is Not Valid Value',
+                'dir.required' => 'Dir is Required',
+                'perPage.number' => 'PerPage Must Be Number',
+                'perPage.required' => 'PerPage is Required',
+                'status.in' => 'Status Is Not Valid Value'
+            ]);
+            
+            //Send failed response if request is not valid
+            if ($validator->fails()) {
+                $errorMessages = StringUtil::ErrorMessage($validator);
+                return ResponseUtil::BadRequest($errorMessages);
+            }
+
+            $results = MMobils::getAll($request);
+
+            return ResponseUtil::Ok("Successfully Get Data", $results);
+        }catch(\Exception $e){
+            return ResponseUtil::InternalServerError($e->getMessage());
+    }
     }
 
     /**
@@ -57,9 +97,7 @@ class MobilApiController extends Controller
                 'model' => 'max:100|string|required',
                 'no_plat' => 'string|required|max:12',
                 'warna' => 'max:12|string|required',
-                'bahan_bakar' => 'max:10|string|required',
                 'description' => 'string|required',
-                'seat' => 'numeric|required',
                 'tarif' => 'numeric|required',
                 'foto' => 'required|file|mimes:jpg,jpeg,png,pdf|max:1024',
             ],[
@@ -75,13 +113,8 @@ class MobilApiController extends Controller
                 'warna.max' => 'Warna Maximal 12 Character',
                 'warna.string' => 'Warna Must Be String',
                 'warna.required' => 'Warna Is Required',
-                'bahan_bakar.max' => 'Bahan Bakar Maximal 10 Character',
-                'bahan_bakar.string' => 'Bahan Bakar Must Be String',
-                'bahan_bakar.required' => 'Bahan Bakar Is Required',
                 'description.string' => 'Fasilitas Must Be String',
                 'description.required' => 'Fasilitas Is Required',
-                'seat.string' => 'Seat Must Be Numeric',
-                'seat.required' => 'Seat Is Required',
                 'tarif.string' => 'Tarif Must Be Numeric',
                 'tarif.required' => 'Tarif Is Required',
                 'foto.required' => 'Foto Mobil Is Required',
@@ -127,9 +160,7 @@ class MobilApiController extends Controller
                 'model' => $request->model,
                 'no_plat' => $request->no_plat,
                 'warna' => $request->warna,
-                'bahan_bakar' => $request->bahan_bakar,
                 'description' => $request->description,
-                'seat' => $request->seat,
                 'tarif' => $request->tarif,
                 'foto' => $base64_file,
                 'is_rent' => 0,

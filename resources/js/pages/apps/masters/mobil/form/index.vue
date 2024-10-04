@@ -87,25 +87,6 @@ import {
                     </VCol>
                     <VCol cols="6">
                       <VTextField
-                        v-model="body.bahan_bakar"
-                        :rules="[requiredValidator]"
-                        label="Bahan Bakar"
-                        required
-                        clearable
-                      />
-                    </VCol>
-                    <VCol cols="6">
-                      <VTextField
-                        v-model="body.seat"
-                        :rules="[requiredValidator]"
-                        label="Jumlah Seat"
-                        type="number"
-                        required
-                        clearable
-                      />
-                    </VCol>
-                    <VCol cols="6">
-                      <VTextField
                         v-model="body.tarif"
                         :rules="[requiredValidator]"
                         label="Tarif"
@@ -186,9 +167,7 @@ import {
           model: "",
           no_plat: "",
           warna: "",
-          bahan_bakar: "",
           description: [],
-          seat: "",
           tarif: "",
           foto: "",
           foto_file: "",
@@ -311,9 +290,7 @@ import {
               formData.append("model", this.body.model)
               formData.append("no_plat", this.body.no_plat)
               formData.append("warna", this.body.warna)
-              formData.append("bahan_bakar", this.body.bahan_bakar)
               formData.append("description", this.body.description.toString())
-              formData.append("seat", this.body.seat)
               formData.append("tarif", this.body.tarif)
               formData.append("foto", this.body.foto)
 
@@ -335,9 +312,7 @@ import {
                   model: "",
                   no_plat: "",
                   warna: "",
-                  bahan_bakar: "",
                   description: [],
-                  seat: "",
                   tarif: "",
                   foto: "",
                   foto_file: "",
@@ -364,9 +339,7 @@ import {
         formData.append("model", this.body.model)
         formData.append("no_plat", this.body.no_plat)
         formData.append("warna", this.body.warna)
-        formData.append("bahan_bakar", this.body.bahan_bakar)
         formData.append("description", this.body.description)
-        formData.append("seat", this.body.seat)
         formData.append("tarif", this.body.tarif)
         formData.append("foto", this.body.foto)
 

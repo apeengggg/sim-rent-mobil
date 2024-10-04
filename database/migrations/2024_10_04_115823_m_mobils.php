@@ -19,9 +19,7 @@ class MMobils extends Migration
             $table->string('model', 100);
             $table->string('no_plat', 12);
             $table->string('warna', 12);
-            $table->string('bahan_bakar', 10);
             $table->text('description');
-            $table->integer('seat');
             $table->integer('tarif');
             $table->integer('is_rent');
             $table->integer('status');
