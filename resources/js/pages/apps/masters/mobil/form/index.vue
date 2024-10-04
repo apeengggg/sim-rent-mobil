@@ -19,6 +19,16 @@ import {
       <VCol cols="12">
         <VCard title="Tambah Mobil">
           <VCardText>
+            <VRow>
+              <VCol cols="12">
+                <VAlert v-if="successMessage != ''" color="success" variant="tonal" @click="() => this.successMessage = ''">
+                  {{successMessage}}
+                </VAlert>
+                <VAlert v-if="errorMessage != ''" color="error" variant="tonal" @click="() => this.errorMessage = ''">
+                  {{errorMessage}}
+                </VAlert>
+              </VCol>
+            </VRow>
             <VRow class="justify-center">
               <VCol cols="12">
                 <VImg
@@ -32,6 +42,7 @@ import {
             <VRow>
               <VCol cols="12">
                 <VForm
+                  :key="formKey"
                   ref="myForm"
                   v-model="formValid"
                   @submit.prevent="doAdd"
@@ -135,13 +146,6 @@ import {
                       >
                         Submit
                       </VBtn>
-                      <VBtn
-                        color="error"
-                        @click="cancelAdd()"
-                        type="reset"
-                      >
-                        Cancel
-                      </VBtn>
                     </VCol>
                   </VRow>
                 </VForm>
@@ -167,6 +171,7 @@ import {
     },
     data(){
       return {
+        formKey: 1,
         fasilitas: [],
         merek_mobil: [],
         tags: [],
@@ -218,25 +223,26 @@ import {
     },
     methods: {
       handleFileChange(event){
+        this.errorMessage = ''
         const file = event.target.files[0]
         console.log("🚀 ~ handleFileChange ~ file:", file)
 
         if(file.size > 1048576){
-          return Swal.fire('Error!', 'Foto max 1 MB', 'error')
+          this.errorMessage = 'Foto Max 1 MB'
         }
 
         if(!file.type.includes("image")){
-          return Swal.fire('Error!', 'File Not Allowed', 'error')
+          this.errorMessage = 'File Not Allowed'
         }
 
         if (file) {
           const reader = new FileReader();
           reader.onload = (e) => {
-            this.body.foto = file
             this.body.foto_preview = e.target.result;
           };
           reader.readAsDataURL(file);
         }
+        this.body.foto = file
       },
       async getFasilitasAndMerekMobil(){
         this.loading = true
@@ -316,16 +322,36 @@ import {
               console.log("🚀 ~ doAdd ~ responseBody:", responseBody)
               if( responseBody.status != 200 ){
                 let msg = Array.isArray(responseBody.message) ? responseBody.message.toString() : responseBody.message;
-                Swal.fire('Error!', msg, 'error')
+                this.errorMessage = msg
+                window.scrollTo({
+                  top: 0,
+                  behavior: 'smooth' // You can also use 'auto' for instant scrolling
+                });
               }else{
-                utils.alertConfirm('Success!', responseBody.message, 'success', 
-                () => {
-                  this.$refs.myForm.reset()
-                  this.body.foto_preview = ''
-                })
+                this.successMessage = responseBody.message
+                this.body = {
+                  mobil_id: "",
+                  merek_mobil_id: "",
+                  model: "",
+                  no_plat: "",
+                  warna: "",
+                  bahan_bakar: "",
+                  description: [],
+                  seat: "",
+                  tarif: "",
+                  foto: "",
+                  foto_file: "",
+                  foto_preview: "",
+                }
+                this.formKey +=1
+                window.scrollTo({
+                  top: 0,
+                  behavior: 'smooth' // You can also use 'auto' for instant scrolling
+                });
+                
               }
             }catch(error){
-              Swal.fire('Error!', error.message, 'error')
+              this.errorMessage = error.message
             }
           }
         })
@@ -352,45 +378,6 @@ import {
           utils.alertConfirm('Success!', responseBody.message, 'success', () => {this.$refs.myForm.reset()})
         }
       },
-      async doDelete(user_id){
-        Swal.fire({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#7367F0",
-          cancelButtonColor: "#EA5455",
-          confirmButtonText: "Yes, delete it!",
-          customClass: {
-            confirmButton: 'confirm-button-text-white',
-            cancelButton: 'confirm-button-text-white'
-          }
-      }).then(async (result) => {
-          if (result.isConfirmed) {
-          //   this.loading = true
-          //   let uri = `/api/v1/users`;
-          //   let responseBody = await api.jsonApi(uri,'DELETE',JSON.stringify({userId: user_id}));
-            
-          //   if( responseBody.status != 200 ){
-          //     this.infoMessage = '';
-          //     this.warningMessage = '';
-          //     this.errorMessage = responseBody.message;
-          //   }else{
-          //     Swal.fire('Deleted!', responseBody.message, 'success')
-          //   }
-          //   this.loading = false
-          //   this.doSave(1)
-          }
-        })
-          
-      },
-      resolveUserStatusVariant(stat){
-        if(stat == 1){
-          return 'success'
-        }
-        
-        return 'danger'
-      }
     },
   }
 </script>Role
