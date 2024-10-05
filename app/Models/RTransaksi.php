@@ -79,7 +79,7 @@ class RTransaksi extends Model
         return $query->first();
     }
 
-    public static function getAllTransaction($param){
+    public static function getAllTransaction($param, $isNotAdmin = false){
         $query = DB::table('r_transaksi as r')
                     ->join('m_mobils as m', 'r.mobil_id', '=', 'm.mobil_id')
                     ->join('m_merek_mobils as mm', 'mm.merek_mobil_id', '=', 'm.merek_mobil_id')
@@ -92,6 +92,10 @@ class RTransaksi extends Model
 
         if($param->transaksi_id){
             $query = $query->where('r.transaksi_id', $param->transaksi_id);
+        }
+        
+        if($isNotAdmin){
+            $query = $query->where('r.user_id', $param->attributes->get('user_id'));
         }
 
         return $query->orderBy("is_return", 'asc')->orderBy("tanggal_mulai", 'desc')

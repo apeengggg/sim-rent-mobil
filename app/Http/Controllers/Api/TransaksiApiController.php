@@ -50,6 +50,44 @@ class TransaksiApiController extends Controller
         }
     }
 
+    public function riwayat(Request $request){
+        try{
+            $validator = Validator::make($request->all(), [
+                'plat_no' => 'max:12|string',
+                'transaksi_id' => 'max:100|string',
+                'orderBy' => 'string|required',
+                'dir' => 'min:3|max:4|string|in:asc,desc|required',
+                'perPage' => 'numeric|required',
+            ],[
+                'plat_no.max' => 'Plat No Maximal 12 Character',
+                'plat_no.string' => 'Plat No Must Be String',
+                'transaksi_id.max' => 'Transaksi ID Maximal 100 Character',
+                'transaksi_id.string' => 'Transaksi ID Must Be String',
+                'orderBy.string' => 'Order By Must Be String',
+                'orderBy.required' => 'Order is Required',
+                'dir.min' => 'Dir Minimal 3 Character',
+                'dir.max' => 'Dir Maximal 3 Character',
+                'dir.string' => 'Dir Must Be String',
+                'dir.in' => 'Dir Value Is Not Valid Value',
+                'dir.required' => 'Dir is Required',
+                'perPage.number' => 'PerPage Must Be Number',
+                'perPage.required' => 'PerPage is Required',
+            ]);
+            
+            //Send failed response if request is not valid
+            if ($validator->fails()) {
+                $errorMessages = StringUtil::ErrorMessage($validator);
+                return ResponseUtil::BadRequest($errorMessages);
+            }
+
+            $results = RTransaksi::getAllTransaction($request, true);
+
+            return ResponseUtil::Ok("Berhasil Get Data", $results);
+        }catch(\Exception $e){
+            return ResponseUtil::InternalServerError($e->getMessage());
+        }
+    }
+
     public function indexPeminjaman(Request $request)
     {
         //

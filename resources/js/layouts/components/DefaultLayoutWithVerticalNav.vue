@@ -99,7 +99,11 @@ const { width: windowWidth } = useWindowSize()
               }
             }
 
-            return true;
+            if(item.hasOwnProperty('heading') && !item.isAdmin) return true
+
+            if(item.isAdmin) return true
+
+            return false;
           });
         } else {
           this.navItemsFilter = navItems.filter(item => {

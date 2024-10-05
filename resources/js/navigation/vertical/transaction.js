@@ -10,5 +10,10 @@ export default [
       to: 'apps-transaction-pengembalian',
       isAdmin: true
     },
+    {
+      title: 'Riwayat',
+      to: 'apps-transaction-riwayat',
+      isAdmin: false
+    },
   ]
   

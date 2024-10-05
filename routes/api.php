@@ -37,6 +37,7 @@ Route::prefix('v1')->group(function () {
 
     Route::middleware(['auth.filter'])->prefix('transaksi')->group(function () {
         Route::get('/', [TransaksiApiController::class, 'index']);
+        Route::get('/riwayat', [TransaksiApiController::class, 'riwayat']);
         Route::post('/', [TransaksiApiController::class, 'store']);
         Route::get('/peminjaman', [TransaksiApiController::class, 'indexPeminjaman']);
         Route::post('/pengembalian', [TransaksiApiController::class, 'update']);
