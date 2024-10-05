@@ -36,6 +36,17 @@ import { themeConfig } from '@themeConfig'
           </VCardTitle>
         </VCardItem>
 
+        <VRow>
+          <VCol cols="12">
+            <VAlert v-if="successMessage != '' && successMessage != null" color="success" variant="tonal" @click="() => this.successMessage = ''">
+              {{successMessage}}
+            </VAlert>
+            <VAlert v-if="errorMessage != '' && errorMessage != null" color="error" variant="tonal" @click="() => this.errorMessage = ''">
+              {{errorMessage}}
+            </VAlert>
+          </VCol>
+        </VRow>
+
         <VCardText class="pt-2">
           <h5 class="text-h5 font-weight-semibold mb-1">
             Daftar Pengguna Baru
@@ -172,6 +183,8 @@ export default {
         confirmation_password: '',
         alamat: '',
       },
+      errorMessage:'',
+      successMessage:'',
       isPasswordVisible: false,
       loading: false,
       allowed_mime_type: ['image/jpg', 'image/jpeg', 'image/png']
@@ -183,12 +196,12 @@ export default {
       console.log("🚀 ~ handleFileUpload ~ file:", file)
       if(file.size > 1048576){
         this.form.foto_sim = ''
-        return Swal.fire('Error!', 'Foto SIM Max 1 MB')
+        this.erroMessage = 'Foto SIM Max 1 MB'
       }
       
       if(!this.allowed_mime_type.includes(file.type)){
         this.form.foto_sim = ''
-        return Swal.fire('Error!', 'Foto SIM Must JPEG, JPG, or PNG')
+        this.errorMessage = 'Foto SIM Harus JPEG, JPG, atau PNG'
       }
 
       this.form.foto_sim_file = file
@@ -197,8 +210,11 @@ export default {
     async doSave(event){
       this.loading = true
 
+      this.successMessage = ''
+      this.errorMessage = ''
+
       if(this.form.password != this.form.confirmation_password){
-        Swal.fire('Error!', 'Password dan konfirmasi password tidak cocok', 'error')
+        this.errorMessage = 'Password dan konfirmasi password tidak cocok'
       }
 
       let form = new FormData()
@@ -222,11 +238,10 @@ export default {
         }else{
           msg = responseBody.message
         }
-
-        Swal.fire('Error!', msg, 'error')
+        this.errorMessage = msg
       }else{
-        utils.alertConfirm('Success!', responseBody.message, 'success', () => {
-          this.form = {
+        this.successMessage = responseBody.message
+        this.form = {
             nama: '',
             username: '',
             no_telepon: '',
@@ -237,7 +252,6 @@ export default {
             confirmation_password: '',
             alamat: '',
           }
-        })
       }
       this.loading = false
     }

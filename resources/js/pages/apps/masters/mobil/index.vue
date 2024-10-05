@@ -22,12 +22,10 @@ import {
           <VCardText>
             <VRow>
                 <VCol cols="12" v-if="successMessage != ''">
-                <VAlert color="success" variant="tonal" @click="() => this.successMessage = ''">
-                  {{successMessage}}
-                </VAlert>
-                </VCol>
-                <VCol cols="12" v-if="errorMessage != ''">
-                  <VAlert color="error" variant="tonal" @click="() => this.errorMessage = ''">
+                  <VAlert v-if="successMessage != '' && successMessage != null" color="success" variant="tonal" @click="() => this.successMessage = ''">
+                    {{successMessage}}
+                  </VAlert>
+                  <VAlert v-if="errorMessage != '' && errorMessage != null" color="error" variant="tonal" @click="() => this.errorMessage = ''">
                     {{errorMessage}}
                   </VAlert>
                 </VCol>
@@ -350,6 +348,10 @@ import {
     methods: {
       async doGetMerekMobil(){
         this.loading = true
+
+        this.errorMessage = ''
+        this.successMessage = ''
+
         let uri = `/api/v1/mobils/combo`;
         let responseBody = await api.jsonApi(uri,'GET');
         if( responseBody.status != 200 ){
@@ -374,6 +376,10 @@ import {
       },
       async doSearch(page){
         this.loading = true
+
+        this.errorMessage = ''
+        this.successMessage = ''
+
         let param = `orderBy=${this.orderBy}&dir=${this.dir}&perPage=${this.page.pageSize}&page=${page}&status=${this.selectedStatus == null ? 1 : this.selectedStatus}`
 
         if(this.param_query.merek_mobil_id != "" && this.param_query.merek_mobil_id != null){
@@ -416,6 +422,9 @@ import {
         }
       },
       async doDelete(mobil_id){
+        this.errorMessage = ''
+        this.successMessage = ''
+
         Swal.fire({
           title: "Are you sure?",
           text: "You won't be able to revert this!",

@@ -21,11 +21,14 @@ import {
           <VCardText>
             <VRow>
               <VCol cols="12">
-                <VAlert v-if="successMessage != ''" color="success" variant="tonal" @click="() => this.successMessage = ''">
+                <VAlert v-if="successMessage != '' && successMessage != null" color="success" variant="tonal" @click="() => this.successMessage = ''">
                   {{successMessage}}
                 </VAlert>
-                <VAlert v-if="errorMessage != ''" color="error" variant="tonal" @click="() => this.errorMessage = ''">
+                <VAlert v-if="errorMessage != '' && errorMessage != null" color="error" variant="tonal" @click="() => this.errorMessage = ''">
                   {{errorMessage}}
+                </VAlert>
+                <VAlert v-if="errorMessageList != '' && errorMessageList != null" color="error" variant="tonal" @click="() => this.errorMessageList = ''">
+                  {{errorMessageList}}
                 </VAlert>
               </VCol>
             </VRow>
@@ -225,6 +228,11 @@ import {
       },
       async getFasilitasAndMerekMobil(){
         this.loading = true
+        
+        this.errorMessage = ''
+        this.successMessage = ''
+        this.errorMessageList = ''
+
         let uri = `/api/v1/mobils/combo`;
         let responseBody = await api.jsonApi(uri,'GET');
         console.log("🚀 ~ doSaveAllRole ~ responseBody:", responseBody)
@@ -266,7 +274,9 @@ import {
           return
         }
         this.errorMessage = ''
+        this.errorMessageList = ''
         this.successMessage = ''
+
         Swal.fire({
           title:"Area you sure want to save this data?",
           icon: "warning",
@@ -331,6 +341,10 @@ import {
       },
       async doSave(){
         this.loading = true
+
+        this.errorMessageList = ''
+        this.errorMessage = ''
+        this.successMessage = ''
 
         let formData = new FormData()
         formData.append("merek_mobil_id", this.body.merek_mobil_id)

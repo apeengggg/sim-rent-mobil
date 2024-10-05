@@ -21,13 +21,14 @@ import {
           <VCardText>
             <VRow class="justify-end">
               <VCol cols="12" v-if="successMessage != ''">
-                <VAlert color="success" variant="tonal" @click="() => this.successMessage = ''">
+                <VAlert v-if="successMessage != '' && successMessage != null" color="success" variant="tonal" @click="() => this.successMessage = ''">
                   {{successMessage}}
                 </VAlert>
-              </VCol>
-              <VCol cols="12" v-if="errorMessage != ''">
-                <VAlert color="error" variant="tonal" @click="() => this.errorMessage = ''">
+                <VAlert v-if="errorMessage != '' && errorMessage != null" color="error" variant="tonal" @click="() => this.errorMessage = ''">
                   {{errorMessage}}
+                </VAlert>
+                <VAlert v-if="errorMessageList != '' && errorMessageList != null" color="error" variant="tonal" @click="() => this.errorMessageList = ''">
+                  {{errorMessageList}}
                 </VAlert>
               </VCol>
               <VCol cols="12">
@@ -321,6 +322,9 @@ import {
       async doGetById(merek_mobil_id){
         this.isEdit = true
         this.loading = true
+        this.errorMessageList = ''
+        this.successMessage = ''
+        this.errorMessage = ''
 
         let uri = `/api/v1/merek-mobils/${merek_mobil_id}`;
         let responseBody = await api.jsonApi(uri,'GET');
@@ -335,6 +339,7 @@ import {
       async doAdd(){
         this.errorMessage = ''
         this.successMessage = ''
+        this.errorMessageList = ''
         Swal.fire({
           title:"Area you sure want to save this data?",
           icon: "warning",

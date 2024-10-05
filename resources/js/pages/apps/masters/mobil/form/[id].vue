@@ -217,6 +217,8 @@ import {
       },
       async getFasilitasAndMerekMobil(){
         this.loading = true
+        this.errorMessage = ''
+        this.successMessage = ''
         let uri = `/api/v1/mobils/combo`;
         let responseBody = await api.jsonApi(uri,'GET');
         console.log("🚀 ~ doSaveAllRole ~ responseBody:", responseBody)
@@ -241,7 +243,8 @@ import {
       },
       async doGetById(mobil_id){
         this.loading = true
-
+        this.errorMessage = ''
+        this.successMessage = ''
         let uri = `/api/v1/mobils/${mobil_id}`;
         let responseBody = await api.jsonApi(uri,'GET');
         if( responseBody.status != 200 ){

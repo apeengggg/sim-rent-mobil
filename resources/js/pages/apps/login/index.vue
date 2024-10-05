@@ -62,6 +62,18 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
           </p>
         </VCardText>
         <VCardText>
+          <VRow>
+            <VCol cols="12" v-if="successMessage != ''">
+              <VAlert v-if="successMessage != '' && successMessage != null" color="success" variant="tonal" @click="() => this.successMessage = ''">
+                {{successMessage}}
+              </VAlert>
+              <VAlert v-if="errorMessage != '' && errorMessage != null" color="error" variant="tonal" @click="() => this.errorMessage = ''">
+                {{errorMessage}}
+              </VAlert>
+            </VCol>
+          </VRow>
+        </VCardText>
+        <VCardText>
           <VForm @submit.prevent="() => login()">
             <VRow>
               <VCol cols="12">
@@ -154,6 +166,8 @@ export default {
   },
   data(){
     return{
+      errorMessage: '',
+      successMessage: '',
       form: {
         username: '',
         password: '',
@@ -166,7 +180,7 @@ export default {
   methods: {
     async login(){
       this.loading = true
-
+      this.errorMessage = ''
       let uri = `/api/v1/auth/login`;
       let responseBody = await api.jsonApi(uri,'POST', JSON.stringify(this.form));
       console.log("🚀 ~ login ~ responseBody:", responseBody)
@@ -177,8 +191,7 @@ export default {
         }else{
           msg = responseBody.message
         }
-
-        Swal.fire('Error!', msg, 'error')
+        this.errorMessage = msg
       }else{
         localStorage.setItem('user_data', JSON.stringify(responseBody.data))
         localStorage.setItem('token', responseBody.data.token)

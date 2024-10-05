@@ -6,8 +6,18 @@ import { VDivider } from 'vuetify/components';
 
 <template>
   <VCard>
-    <!-- SECTION Header -->
-    <!--  eslint-disable vue/no-mutating-props -->
+    <VRow>
+      <VCol cols="12" v-if="successMessage != '' && successMessage != null">
+        <VAlert color="success" variant="tonal" @click="() => this.successMessage = ''">
+          {{successMessage}}
+        </VAlert>
+      </VCol>
+      <VCol cols="12" v-if="errorMessage != '' && errorMessage != null">
+        <VAlert color="error" variant="tonal" @click="() => this.errorMessage = ''">
+          {{errorMessage}}
+        </VAlert>
+      </VCol>
+    </VRow>
     <VCardText class="d-flex flex-wrap justify-space-between flex-column flex-sm-row">
       <!-- 👉 Left Content -->
       <div class="ma-sm-4">
@@ -256,7 +266,9 @@ export default {
         total_tarif: '',
         total_tarif_asli: '',
         description: ''
-      }
+      },
+      successMessage: '',
+      erroMessage: ''
     }
   },
   methods: {
