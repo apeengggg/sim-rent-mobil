@@ -208,11 +208,11 @@ import {
       persistent
     >
       <!-- Dialog Activator -->
-      <template #activator="{ props }">
+      <!-- <template #activator="{ props }">
         <VBtn v-bind="props">
           Open Dialog
         </VBtn>
-      </template>
+      </template> -->
 
       <!-- Dialog close btn -->
       <DialogCloseBtn @click="cancelUpdate()" />
