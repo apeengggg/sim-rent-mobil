@@ -5,7 +5,6 @@ import authV2LoginIllustrationDark from '@images/pages/auth-v2-login-illustratio
 import authV2LoginIllustrationLight from '@images/pages/auth-v2-login-illustration-light.png'
 import authV2MaskDark from '@images/pages/misc-mask-dark.png'
 import authV2MaskLight from '@images/pages/misc-mask-light.png'
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
@@ -89,23 +88,11 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
                 <VTextField
                   v-model="form.password"
                   label="Password"
+                  class="mb-4"
                   :type="isPasswordVisible ? 'text' : 'password'"
                   :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                   @click:append-inner="isPasswordVisible = !isPasswordVisible"
                 />
-
-                <div class="d-flex align-center flex-wrap justify-space-between mt-2 mb-4">
-                  <VCheckbox
-                    v-model="form.remember"
-                    label="Ingat saya"
-                  />
-                  <RouterLink
-                    class="text-primary ms-2 mb-1"
-                    :to="{ name: 'pages-authentication-forgot-password-v2' }"
-                  >
-                    Lupa Password?
-                  </RouterLink>
-                </div>
 
                 <VBtn
                   block
@@ -195,7 +182,13 @@ export default {
       }else{
         localStorage.setItem('user_data', JSON.stringify(responseBody.data))
         localStorage.setItem('token', responseBody.data.token)
-        this.$router.push('/apps/dashboard');
+
+        if(responseBody.data.role_name.toLowerCase() === 'user'){
+          this.$router.push('/apps/transaction/peminjaman');
+        }else{
+          this.$router.push('/apps/masters/mobil');
+        }
+
       }
       this.loading = false
     }

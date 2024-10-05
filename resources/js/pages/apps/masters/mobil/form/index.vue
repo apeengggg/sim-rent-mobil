@@ -1,16 +1,6 @@
 <script setup>
 import {
-    alphaDashValidator,
-    alphaValidator,
-    betweenValidator,
-    confirmedValidator,
-    emailValidator,
-    integerValidator,
-    lengthValidator,
-    passwordValidator,
-    regexValidator,
     requiredValidator,
-    urlValidator,
   } from '@validators'
 </script>
 <template>
@@ -360,7 +350,7 @@ import {
         if( responseBody.status != 200 ){
           this.errorMessageList = responseBody.message;
         }else{
-          utils.alertConfirm('Success!', responseBody.message, 'success', () => {this.$refs.myForm.reset()})
+          this.successMessage = responseBody.message
         }
       },
     },

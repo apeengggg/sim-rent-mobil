@@ -50,7 +50,7 @@ class MerekMobilApiController extends Controller
     
             $results = MMerekMobils::getAll($request);
 
-            return ResponseUtil::Ok("Successfully Get Data", $results);
+            return ResponseUtil::Ok("Berhasil Tambah Data", $results);
         }catch(\Exception $e){
             return ResponseUtil::InternalServerError($e->getMessage());
         }
@@ -74,7 +74,7 @@ class MerekMobilApiController extends Controller
     
             $results = MMerekMobils::getMerekById($id);
 
-            return ResponseUtil::Ok("Successfully Get Data", $results);
+            return ResponseUtil::Ok("Berhasil Get Data", $results);
         }catch(\Exception $e){
             return ResponseUtil::InternalServerError($e->getMessage());
         }
@@ -119,7 +119,7 @@ class MerekMobilApiController extends Controller
 
             MMerekMobils::create($data);
             
-            return ResponseUtil::Ok('Successfully created', null);
+            return ResponseUtil::Ok('Berhasil Tambah Data', null);
         }catch(\Exception $e){
             return ResponseUtil::InternalServerError($e);
         }
@@ -179,7 +179,7 @@ class MerekMobilApiController extends Controller
 
             $merek_mobil->update($data);
             
-            return ResponseUtil::Ok('Successfully created', null);
+            return ResponseUtil::Ok('Berhasil Ubah Data', null);
         }catch(\Exception $e){
             return ResponseUtil::InternalServerError($e);
         }

@@ -53,18 +53,18 @@ class AuthController extends Controller
 
             $results = MUsers::getUserFromUsername($request->username);
             if($results == null){
-                return ResponseUtil::Unauthorized("Login failed, either your User Id isn't registered in our system or your password is incorrect");
+                return ResponseUtil::Unauthorized("Login Gagal, Mungkin Karena Data Tidak Terdaftar Dalam Sistem, Atau Password Salah");
             }
             
             $compare = Hash::check($request->password, $results->password);
             if(!$compare){
-                return ResponseUtil::Unauthorized("Login failed, either your User Id isn't registered in our system or your password is incorrect");
+                return ResponseUtil::Unauthorized("Login Gagal, Mungkin Karena Data Tidak Terdaftar Dalam Sistem, Atau Password Salah");
             }
             
             // $permission = MPermissions::getPermissionById($results->role_id);
             // // echo $permission;
             // if(!$permission){
-            //     return ResponseUtil::Unauthorized("Login failed, either your User Id isn't registered in our system or your password is incorrect");
+            //     return ResponseUtil::Unauthorized("Login Gagal, Mungkin Karena Data Tidak Terdaftar Dalam Sistem, Atau Password Salah");
             // }
             
             // $object_permission = PermissionUtil::createObjectPermission($permission);
@@ -86,7 +86,7 @@ class AuthController extends Controller
             ];
 
 
-            return ResponseUtil::Ok("Successfully Login", $results);
+            return ResponseUtil::Ok("Berhasil Login", $results);
         }catch(\Exception $e){
             dd($e);
             return ResponseUtil::InternalServerError($e);
@@ -142,7 +142,7 @@ class AuthController extends Controller
                     $allowed_mime = ['image/jpg', 'image/jpeg', 'image/png'];
                     $file = $request->file('foto_sim_file');
                     if($file->getSize() > 1048576 || !in_array($file->getMimeType(), $allowed_mime)){
-                        return ResponseUtil::BadRequest('Failed Upload Foto SIM');
+                        return ResponseUtil::BadRequest('Gagal Upload Foto SIM');
                     }
                     $fileName = $user_id . "_" . $file->getClientOriginalName();
                     $mimeType = $file->getMimeType();
@@ -150,7 +150,7 @@ class AuthController extends Controller
                     $dataUrl = "data:{$mimeType};base64,{$base64_file}";
                     $base64_file = $dataUrl;
                 }catch(\Exception $e){
-                    return ResponseUtil::BadRequest('Failed Upload Foto SIM');
+                    return ResponseUtil::BadRequest('Gagal Upload Foto SIM');
                 }
             }
 
@@ -158,22 +158,22 @@ class AuthController extends Controller
 
             $validatePhoneNumberFormat = StringUtil::validateIndonesianPhoneNumber($request->no_telepon);
             if(!$validatePhoneNumberFormat){
-                return ResponseUtil::BadRequest('Phone Number is Not Valid');
+                return ResponseUtil::BadRequest('Nomor Telepon Tidak Valid!');
             }
 
             $validateUsername = MUsers::getUserFromUsername($request->username);
             if($validateUsername){
-                return ResponseUtil::BadRequest('Username is exists');
+                return ResponseUtil::BadRequest('Username Sudah Digunakan!');
             }
 
             $validatePhoneNumber = MUsers::getUserFromPhoneNumber($request->no_telepon);
             if($validatePhoneNumber){
-                return ResponseUtil::BadRequest('Phone Number is exists');
+                return ResponseUtil::BadRequest('No Telepon Sudah Digunakan!');
             }
 
             $role = MRoles::getUserRoleId();
             if(!$role){
-                return ResponseUtil::BadRequest('Role User Not Found');
+                return ResponseUtil::BadRequest('Role Tidak Ditemukan!');
             }
 
             $role_id = $role->role_id;
@@ -204,7 +204,7 @@ class AuthController extends Controller
             MUserDatas::create($data_user);
 
             DB::commit();
-            return ResponseUtil::Ok('Successfully created', null);
+            return ResponseUtil::Ok('Berhasil Tambah Data', null);
         }catch(\Exception $e){
             DB::rollback();
             return ResponseUtil::InternalServerError($e->getMessage());

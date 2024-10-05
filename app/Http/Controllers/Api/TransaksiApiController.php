@@ -231,7 +231,7 @@ class TransaksiApiController extends Controller
             // dd($data);
             $results->update($data);
 
-            return ResponseUtil::Ok("Berhasil Tambah Transaksi", null);
+            return ResponseUtil::Ok("Berhasil Ubah Transaksi", null);
         }catch(\Exception $e){
             dd($e);
             return ResponseUtil::InternalServerError($e->getMessage());

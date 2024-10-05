@@ -3,38 +3,8 @@ import utils from "@/utils/CommonUtils"
 import Swal from 'sweetalert2'
 
 export default {
-    async getCommon(url, params, callback) {
-        const request = await axios
-            .get(process.env.VUE_APP_API_URL + `/api/common${url}${params}`, {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.token,
-                },
-            })
-            .then((response) => {
-                if (callback) {
-                    return callback(response, null)
-                }
-                return response
-            })
-            .catch((error) => {
-                if (callback) {
-                    return callback(error.response, error)
-                }
-                return error
-            })
-        return request
-    },
-    
-    async cmnNodeJsonApi( uri, method, jsonBody){
-        return this.execJsonApi(process.env.VUE_APP_CMN_NODE_API_URL + uri, method, jsonBody);
-    },
-
     async jsonApi( uri, method, jsonBody){
         return this.execJsonApi(import.meta.env.VITE_APP_URL + uri, method, jsonBody);
-    },
-
-    async etrDownloadApi( uri, method, data){
-        return await this.execDownloadApi( process.env.VUE_APP_API_URL + uri, method, data);
     },
 
     async uploadPostApi( uri, formData){
@@ -72,36 +42,6 @@ export default {
           utils.error(await utils.message('MSGCMN0001',[uri,e.message]));
         }
     },
-
-    async execDownloadApi( uri, method, data){
-        try{
-          let response = await fetch( uri, {
-              method: method, // *GET, POST, PUT, DELETE, etc.
-              headers: {
-                'Content-Type': 'application/json',
-                "Authorization": 'Bearer ' + localStorage.token,
-              },
-              body: data,
-          } );
-          await response.blob().then(blob => {
-            let FILE = window.URL.createObjectURL(blob);
-            let docUrl = document.createElement('a');
-            docUrl.href = FILE;
-            let fileName = response.headers.get('content-disposition')
-              .split(';')
-              .find(n => n.includes('filename='))
-              .replace('filename=', '')
-              .trim()
-              ;
-            docUrl.setAttribute('download', fileName);
-            document.body.appendChild(docUrl);
-            docUrl.click();
-          });
-          return ;
-        }catch(e){        
-          utils.error(await utils.message('MSGCMN0001',[uri,e.message]));
-        }
-      },
     
     async uploadApi( uri, method, formData){
       return this.execUploadApi(import.meta.env.VITE_APP_URL + uri, method, formData);

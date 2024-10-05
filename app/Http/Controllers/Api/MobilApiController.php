@@ -169,7 +169,7 @@ class MobilApiController extends Controller
 
             $validatePlatNo = MMobils::getMobilFromNoPlat($request->no_plat);
             if($validatePlatNo){
-                return ResponseUtil::BadRequest('No Plat Sudah Terpakai!');
+                return ResponseUtil::BadRequest('No Plat Sudah Terdaftar!');
             }
 
             DB::beginTransaction();
@@ -292,7 +292,7 @@ class MobilApiController extends Controller
 
             $validatePlatNo = MMobils::getMobilFromNoPlat($request->no_plat, true, $mobil_id);
             if($validatePlatNo){
-                return ResponseUtil::BadRequest('No Plat sudah terpakai!');
+                return ResponseUtil::BadRequest('No Plat sudah terdaftar!');
             }
 
             DB::beginTransaction();
@@ -318,7 +318,7 @@ class MobilApiController extends Controller
             $mobil->update($data);
 
             DB::commit();
-            return ResponseUtil::Ok('Berhasil Edit Data', $data);
+            return ResponseUtil::Ok('Berhasil Ubah Data', $data);
         }catch(\Exception $e){
             DB::rollback();
             return ResponseUtil::InternalServerError($e->getMessage());

@@ -1,17 +1,4 @@
 <script setup>
-import {
-    alphaDashValidator,
-    alphaValidator,
-    betweenValidator,
-    confirmedValidator,
-    emailValidator,
-    integerValidator,
-    lengthValidator,
-    passwordValidator,
-    regexValidator,
-    requiredValidator,
-    urlValidator,
-  } from '@validators'
 </script>
 <template>
   <section>
@@ -257,12 +244,10 @@ import {
 <script>
   import api from "@/apis/CommonAPI"
   import utils from "@/utils/CommonUtils"
-  import AddNewUser from '@/views/apps/masters/user/AddNewUser.vue'
   import Swal from 'sweetalert2'
 
   export default {
     components: {
-      AddNewUser
     },
     mounted(){
       this.doSearch(1)

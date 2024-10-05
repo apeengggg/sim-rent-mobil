@@ -62,7 +62,7 @@ class RoleApiController extends Controller
             $results = MUsers::getUsers($request);
             $meta_user = MUsers::getMetaUsers();
 
-            return ResponseUtil::Ok("Successfully Get Data", $results, $meta_user);
+            return ResponseUtil::Ok("Berhasil Get Data", $results, $meta_user);
         }catch(\Exception $e){
             return ResponseUtil::InternalServerError($e);
         }
@@ -73,7 +73,7 @@ class RoleApiController extends Controller
         try{
             $results = MRoles::getAll();
 
-            return ResponseUtil::Ok("Successfully Get Data", $results);
+            return ResponseUtil::Ok("Berhasil Get Data", $results);
         }catch(\Exception $e){
             return ResponseUtil::InternalServerError($e);
         }
@@ -147,7 +147,7 @@ class RoleApiController extends Controller
 
             $validatePhoneNumberFormat = StringUtil::validateIndonesianPhoneNumber($request->phone);
             if(!$validatePhoneNumberFormat){
-                return ResponseUtil::BadRequest('Phone Number is Not Valid');
+                return ResponseUtil::BadRequest('No Telepeon Tidak Valid');
             }
 
             // $validateEmailPhoneNip = Users::getUserFromEmailPhoneNip($request->email, $request->phone, $request->nip);
@@ -176,7 +176,7 @@ class RoleApiController extends Controller
 
             MUsers::create($data);
             
-            return ResponseUtil::Ok('Successfully created', null);
+            return ResponseUtil::Ok('Berhasil Tambah Data', null);
         }catch(\Exception $e){
             return ResponseUtil::InternalServerError($e);
         }
@@ -204,7 +204,7 @@ class RoleApiController extends Controller
     {
         try{
             
-            return ResponseUtil::Ok('Successfully created', null);
+            return ResponseUtil::Ok('Berhasil Get Data', null);
         }catch(\Exception $e){
             return ResponseUtil::InternalServerError($e);
         }
@@ -234,7 +234,7 @@ class RoleApiController extends Controller
             }
 
             if($request->userId == $request->attributes->get('user_id')){
-                return ResponseUtil::BadRequest('You cant delete your own account');
+                return ResponseUtil::BadRequest('Kamu Tidak Bisa Menghapus Akun Sendiri');
             }
             
             $get_user = Users::getUserFromUserId($request->userId);
@@ -243,7 +243,7 @@ class RoleApiController extends Controller
             }
             
             Users::deleteUser($request->userId, $request->attributes->get('user_id'));
-            return ResponseUtil::Ok('Successfully Deleted', null);
+            return ResponseUtil::Ok('Berhasil Hapus Data', null);
         }catch(\Exception $e){
             return ResponseUtil::InternalServerError($e);
         }

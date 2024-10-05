@@ -7,7 +7,6 @@ use App\Http\Controllers\Api\MerekMobilApiController;
 use App\Http\Controllers\Api\MobilApiController;
 use App\Http\Controllers\Api\RoleApiController;
 use App\Http\Controllers\Api\TransaksiApiController;
-use App\Http\Controllers\Api\UserApiController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -20,15 +19,6 @@ use App\Http\Controllers\Api\UserApiController;
 */
 
 Route::prefix('v1')->group(function () {
-    // 
-    Route::middleware(['auth.filter'])->prefix('users')->group(function () {
-        Route::get('/', [UserApiController::class, 'index']);
-        Route::get('/{id}', [UserApiController::class, 'getById']);
-        Route::post('/', [UserApiController::class, 'store']);
-        Route::put('/', [UserApiController::class, 'update']);
-        Route::delete('/', [UserApiController::class, 'destroy']);
-    });
-
     Route::middleware(['auth.filter'])->prefix('merek-mobils')->group(function () {
         Route::get('/', [MerekMobilApiController::class, 'index']);
         Route::get('/{id}', [MerekMobilApiController::class, 'getById']);

@@ -7,7 +7,7 @@ import {
   <section>
     <VRow>
       <VCol cols="12">
-        <VCard title="Tambah Mobil">
+        <VCard title="Edit Mobil">
           <VCardText>
             <VRow>
               <VCol cols="12">
