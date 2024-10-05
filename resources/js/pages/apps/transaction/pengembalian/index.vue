@@ -584,4 +584,5 @@ import {
 <route lang="yaml">
   meta:
     requiresLogin: true
+    isAdmin: true
 </route>

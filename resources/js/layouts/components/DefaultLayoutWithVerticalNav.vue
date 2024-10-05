@@ -20,7 +20,7 @@ const { width: windowWidth } = useWindowSize()
 
 <template>
   <VerticalNavLayout
-    :nav-items="navItems"
+    :nav-items="navItemsFilter"
   >
     <!-- 👉 navbar -->
     <template #navbar="{ toggleVerticalOverlayNavActive }">
@@ -71,3 +71,53 @@ const { width: windowWidth } = useWindowSize()
     <TheCustomizer />
   </VerticalNavLayout>
 </template>
+
+<script>
+  export default {
+    created(){
+      this.setupMenu()
+    },
+    data(){
+      return {
+        navItemsFilter: []
+      }
+    },
+    methods: {
+      setupMenu(){
+        const role = JSON.parse(localStorage.getItem('user_data')).role_name
+        let isAdmin = false
+        if(role.toLowerCase() != "user"){
+          isAdmin = true
+        }
+        if (isAdmin) {
+          this.navItemsFilter = navItems.filter(item => {
+
+            if (item.children) {
+              const filteredChildren = item.children.filter(child => child.isAdmin);
+              if (filteredChildren.length > 0) {
+                return { ...item,  ...filteredChildren };
+              }
+            }
+
+            return true;
+          });
+        } else {
+          this.navItemsFilter = navItems.filter(item => {
+            if (!item.isAdmin) return true;
+
+            // console.log("🚀 ~ setupMenu ~ filteredChildren:", filteredChildren)
+            if (item.children) {
+              const filteredChildren = item.children.filter(child => !child.isAdmin);
+              if (filteredChildren.length > 0) {
+                return { ...item, ...filteredChildren };
+              }
+            }
+
+            return false;
+          });
+        }
+      }
+    }
+  }
+
+</script>

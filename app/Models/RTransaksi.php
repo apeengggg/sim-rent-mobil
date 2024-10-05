@@ -89,7 +89,7 @@ class RTransaksi extends Model
             $query = $query->where('r.transaksi_id', $param->transaksi_id);
         }
 
-        return $query->orderBy("tanggal_mulai", $param->dir)->orderBy("is_return", $param->dir)
+        return $query->orderBy("is_return", 'asc')->orderBy("tanggal_mulai", 'desc')
                 ->paginate($param->perPage);
         
     }

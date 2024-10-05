@@ -9,16 +9,8 @@ const router = createRouter({
     {
       path: '/',
       redirect: to => {
-        return { name: 'apps-home' }
+        return { name: 'apps-login' }
       }
-    },
-    {
-      path: '/pages/user-profile',
-      redirect: () => ({ name: 'pages-user-profile-tab', params: { tab: 'profile' } }),
-    },
-    {
-      path: '/pages/account-settings',
-      redirect: () => ({ name: 'pages-account-settings-tab', params: { tab: 'account' } }),
     },
     ...setupLayouts(routes),
   ],
@@ -51,8 +43,10 @@ function isAuthenticated() {
 
 // Docs: https://router.vuejs.org/guide/advanced/navigation-guards.html#global-before-guards
 router.beforeEach((to, from, next) => {
-  console.log("🚀 ~ router.beforeEach ~ to:", to)
-  if (to.meta.requiresLogin && !isAuthenticated()) {
+
+  const user_data = JSON.parse(localStorage.getItem('user_data'))
+
+  if ((to.meta.requiresLogin && !isAuthenticated()) || (user_data && user_data.role_name.toLowerCase() === 'user' && to.meta.isAdmin)) {
     // If not authenticated, redirect to login page
     return next({ name: 'apps-login'})
   }

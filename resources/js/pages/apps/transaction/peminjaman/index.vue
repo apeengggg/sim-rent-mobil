@@ -348,3 +348,9 @@ const isCardDetailsVisible = ref(false)
   }
 }
 </style>
+
+<route lang="yaml">
+  meta:
+    requiresLogin: true
+    isAdmin: false
+</route>

@@ -364,3 +364,9 @@ export default {
   }
 }
 </script>
+
+<route lang="yaml">
+  meta:
+    requiresLogin: true
+    isAdmin: false
+</route>
