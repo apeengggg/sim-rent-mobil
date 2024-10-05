@@ -170,7 +170,7 @@ export default {
       this.errorMessage = ''
       let uri = `/api/v1/auth/login`;
       let responseBody = await api.jsonApi(uri,'POST', JSON.stringify(this.form));
-      console.log("🚀 ~ login ~ responseBody:", responseBody)
+      // 
       if( responseBody.status != 200 ){
         let msg = ''
         if(Array.isArray(responseBody.message)){

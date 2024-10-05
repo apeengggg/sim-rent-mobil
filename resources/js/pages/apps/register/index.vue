@@ -194,7 +194,7 @@ export default {
   methods: {
     handleFileUpload(e){
       const file = e.target.files[0];
-      console.log("🚀 ~ handleFileUpload ~ file:", file)
+      
       if(file.size > 1048576){
         this.form.foto_sim = ''
         this.erroMessage = 'Foto SIM Max 1 MB'
@@ -206,7 +206,7 @@ export default {
       }
 
       this.form.foto_sim_file = file
-      console.log("🚀 ~ handleFileUpload ~ this.foto_sim_file:", this.form.foto_sim_file)
+      
     },
     async doSave(event){
       this.loading = true

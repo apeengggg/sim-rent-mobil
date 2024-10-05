@@ -197,7 +197,7 @@ import {
       handleFileChange(event){
         this.errorMessage = ''
         const file = event.target.files[0]
-        console.log("🚀 ~ handleFileChange ~ file:", file)
+        // 
 
         if(file.size > 1048576){
           this.errorMessage = 'Foto Max 1 MB'
@@ -225,7 +225,7 @@ import {
 
         let uri = `/api/v1/mobils/combo`;
         let responseBody = await api.jsonApi(uri,'GET');
-        console.log("🚀 ~ doSaveAllRole ~ responseBody:", responseBody)
+        // 
         if( responseBody.status != 200 ){
           this.errorMessage = responseBody.message;
         }else{
@@ -256,7 +256,7 @@ import {
       //   }else{
       //     this.body = {...responseBody.data};
       //     this.body.switchToggle = this.body.status == 1 ? true : false
-      //     console.log("🚀 ~ doGetById ~ this.body:", this.body)
+      //     
       //   }
       // },
       async doAdd(){
@@ -294,7 +294,7 @@ import {
 
               let uri = `/api/v1/mobils`;
               let responseBody = await api.uploadApi(uri, 'POST', formData);
-              console.log("🚀 ~ doAdd ~ responseBody:", responseBody)
+              // 
               if( responseBody.status != 200 ){
                 let msg = Array.isArray(responseBody.message) ? responseBody.message.toString() : responseBody.message;
                 this.errorMessage = msg

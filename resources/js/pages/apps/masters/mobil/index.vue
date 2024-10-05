@@ -381,7 +381,7 @@
 
         let uri = `/api/v1/mobils?${param}`;
         let responseBody = await api.jsonApi(uri,'GET');
-        console.log("🚀 ~ doSearch ~ responseBody:", responseBody)
+        // 
         if( responseBody.status != 200 ){
           let msg = Array.isArray(responseBody.message) ? responseBody.message.toString() : responseBody.message;
           this.errorMessage = msg
@@ -398,7 +398,7 @@
             }).format(obj.tarif);
           })
 
-          console.log("🚀 ~ doSearch ~ this.data:", this.data)
+          // 
 
           this.page.totalRecords= responseBody.data.total
           this.page.totalPages= responseBody.data.last_page

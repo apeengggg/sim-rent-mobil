@@ -185,7 +185,7 @@
           this.loading = true
           let uri = `/api/v1/roles/all`;
           let responseBody = await api.jsonApi(uri,'GET');
-          console.log("🚀 ~ doSearchAllRole ~ responseBody:", responseBody)
+          
           if( responseBody.status != 200 ){
             this.errorMessage = responseBody.message;
           }else{
@@ -223,11 +223,11 @@
               photo_name: this.body.photo_file != "" ? this.body.photo_name : "",
               photo_mime_type: this.body.photo_file != "" ? this.body.photo_mime_type : ""
             }
-            console.log("🚀 ~ doAdd ~ body:", body)
+            
     
             let uri = `/api/v1/users`;
             let responseBody = await api.jsonApi(uri, 'PUT', JSON.stringify(body));
-            console.log("🚀 ~ doUpdate ~ responseBody:", responseBody)
+            
             if( responseBody.status != 200 ){
               let msg = Array.isArray(responseBody.message) ? responseBody.message.toString() : responseBody.message;
               Swal.fire('Error!', msg, 'error')
@@ -253,7 +253,7 @@
         if(file.size > 1048576){
           return Swal.fire('Error!', 'Max file size 1 MB', 'error')
         }
-        console.log("🚀 ~ handleFileUpload ~ file:", file)
+        
         const base_64 = await utils.encodeFileToBase64(file)
         if (file && base_64) {
           const reader = new FileReader();
@@ -264,7 +264,7 @@
             this.body.photo_file = plain[1]
             this.body.photo_name = file.name
             this.body.photo_mime_type = file.type
-            console.log({a: plain[1], b: file.name, c: file.type})
+            
           };
           reader.readAsDataURL(file);
         }
@@ -274,7 +274,7 @@
 
           let uri = `/api/v1/users/${user_id}`;
           let responseBody = await api.jsonApi(uri,'GET');
-          console.log("🚀 ~ doGetById ~ responseBody:", responseBody)
+          
           if( responseBody.status != 200 ){
             this.infoMessage = '';
             this.warningMessage = '';
@@ -286,7 +286,7 @@
             this.body.roleId = responseBody.data.role_id
             this.body.photo = ''
             this.body.password = ''
-            console.log("🚀 ~ doGetById ~ this.body:", this.body)
+            
             if(responseBody.data.length<=0){
                 this.infoMessage = ''
                 this.warningMessage = 'Data not found'

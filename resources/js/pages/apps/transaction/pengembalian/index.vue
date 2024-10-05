@@ -492,15 +492,15 @@ import {
 
         if(telat && today != tanggal_selesai){
           const telat_hari = moment(new Date()).diff(moment(data.tanggal_selesai), 'days')
-          console.log("🚀 ~ doUpdate ~ telat_hari:", telat_hari)
+          
           const denda = ((parseInt(data.tarif) * 10) / 100) * telat_hari
-          console.log("🚀 ~ doUpdate ~ denda:", denda)
+          
 
           this.modal.denda = utils.formatRupiah(denda)
           this.modal.telat_hari = telat_hari
           this.modal.total_tarif = utils.formatRupiah(tarif_normal + (telat_hari * parseInt(data.tarif)) + denda)
           this.modal.total_tarif_number = tarif_normal + (telat_hari * parseInt(data.tarif)) + denda
-          console.log("🚀 ~ doUpdate ~ this.modal:", this.modal)
+          
         }
       },
       doGetById(mobil_id){
@@ -516,7 +516,7 @@ import {
 
         let uri = `/api/v1/transaksi?${param}`;
         let responseBody = await api.jsonApi(uri,'GET');
-        console.log("🚀 ~ doSearch ~ responseBody:", responseBody)
+        
         if( responseBody.status != 200 ){
           let msg = Array.isArray(responseBody.message) ? responseBody.message.toString() : responseBody.message;
           this.errorMessage = msg
@@ -543,7 +543,7 @@ import {
             }).format(obj.total_tarif);
           })
 
-          console.log("🚀 ~ doSearch ~ this.data:", this.data)
+          
 
           this.page.totalRecords= responseBody.data.total
           this.page.totalPages= responseBody.data.last_page

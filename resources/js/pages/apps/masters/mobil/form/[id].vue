@@ -194,7 +194,7 @@ import {
       handleFileChange(event){
         this.errorMessage = ''
         const file = event.target.files[0]
-        console.log("🚀 ~ handleFileChange ~ file:", file)
+        // 
 
         if(file.size > 1048576){
           this.body.foto = ''
@@ -221,7 +221,7 @@ import {
         this.successMessage = ''
         let uri = `/api/v1/mobils/combo`;
         let responseBody = await api.jsonApi(uri,'GET');
-        console.log("🚀 ~ doSaveAllRole ~ responseBody:", responseBody)
+        // 
         if( responseBody.status != 200 ){
           this.errorMessage = responseBody.message;
         }else{
@@ -289,14 +289,14 @@ import {
               formData.append("tarif", this.body.tarif)
 
               if(this.body.foto_file){
-                console.log("🚀 ~ doSave ~ this.body.foto_file:", this.body.foto_file)
+                // 
                 formData.append("foto", this.body.foto_file)
               }
 
               let uri = `/api/v1/mobils/update`;
               let responseBody = await api.uploadApi(uri, 'POST', formData);
               // let responseBody = await api.jsonApi(uri, 'PUT', JSON.stringify(this.body));
-              console.log("🚀 ~ doAdd ~ responseBody:", responseBody)
+              // 
               if( responseBody.status != 200 ){
                 let msg = Array.isArray(responseBody.message) ? responseBody.message.toString() : responseBody.message;
                 this.errorMessage = msg

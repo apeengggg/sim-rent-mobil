@@ -1,7 +1,7 @@
 <script setup>
 const router = useRouter()
 const userData = JSON.parse(localStorage.getItem('user_data') || 'null')
-console.log("🚀 ~ userData:", userData)
+// 
 const user_data = JSON.parse(localStorage.getItem("user_data"))
 
 const logout = () => {

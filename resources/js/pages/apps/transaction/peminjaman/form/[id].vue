@@ -238,7 +238,7 @@ export default {
 
     this.data.transaksi_id = this.generateRandomStringWithDate(5)
     
-    console.log("🚀 ~ mounted ~ this.mobil:", this.mobil)
+    
   },
   data(){
     return{

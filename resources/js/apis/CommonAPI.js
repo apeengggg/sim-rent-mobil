@@ -34,7 +34,7 @@ export default {
           }
           return jsonResponse;
         }catch(e){       
-          console.log("🚀 ~ execJsonApi ~ e:", e)
+          // 
           if(uri.includes("rate-quality-input") && e.message == 'Failed to fetch'){
             e.message = 'Network Error'
           }
@@ -72,7 +72,7 @@ export default {
             body: formData
         });
         let jsonResponse = await response.json();
-        console.log("🚀 ~ execUploadApi ~ jsonResponse:", jsonResponse)
+        // 
         return jsonResponse;
       }catch(e){        
         utils.error(await utils.message('MSGCMN0001',[uri,e.message]));

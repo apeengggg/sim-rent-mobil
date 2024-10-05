@@ -184,7 +184,7 @@ const isCardDetailsVisible = ref(false)
       const yesterday = new Date()
       yesterday.setDate(yesterday.getDate() - 1)
       this.yesterday = yesterday.toISOString().split('T')[0]
-      console.log("🚀 ~ created ~ this.yesterday:", this.yesterday)
+      
     },
     mounted(){
       this.doGetMerekMobil()
@@ -267,7 +267,7 @@ const isCardDetailsVisible = ref(false)
       changeDate(){
         if(this.tanggal_peminjaman.includes('to')){
           const tanggal = this.tanggal_peminjaman.split('to')
-          console.log("🚀 ~ changeDate ~ tanggal:", tanggal)
+          
           this.param_query.tanggal_mulai = tanggal[0].trim()
           this.param_query.tanggal_selesai = tanggal[1].trim()
           this.doSearch(1)
@@ -297,7 +297,7 @@ const isCardDetailsVisible = ref(false)
 
         let uri = `/api/v1/transaksi/peminjaman?${param}`;
         let responseBody = await api.jsonApi(uri,'GET');
-        console.log("🚀 ~ doSearch ~ responseBody:", responseBody)
+        
         if( responseBody.status != 200 ){
           let msg = Array.isArray(responseBody.message) ? responseBody.message.toString() : responseBody.message;
           this.errorMessage = msg
@@ -314,7 +314,7 @@ const isCardDetailsVisible = ref(false)
             }).format(obj.tarif);
           })
 
-          console.log("🚀 ~ doSearch ~ this.data:", this.data)
+          
 
           this.page.totalRecords= responseBody.data.total
           this.page.totalPages= responseBody.data.last_page

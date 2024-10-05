@@ -331,7 +331,7 @@ import {
         }else{
           this.body = {...responseBody.data};
           this.body.switchToggle = this.body.status == 1 ? true : false
-          console.log("🚀 ~ doGetById ~ this.body:", this.body)
+          // 
         }
       },
       async doAdd(){
@@ -382,7 +382,7 @@ import {
 
         let uri = `/api/v1/merek-mobils?${param}`;
         let responseBody = await api.jsonApi(uri,'GET');
-        // console.log("🚀 ~ doSearch ~ responseBody:", responseBody)
+        // 
         if( responseBody.status != 200 ){
           this.errorMessageList = responseBody.message;
         }else{

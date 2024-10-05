@@ -18,7 +18,7 @@ const router = createRouter({
 
 function isAuthenticated() {
   const token = localStorage.getItem('token');
-  console.log("🚀 ~ isAuthenticated ~ token:", token)
+  
 
   if (!token) {
     return false; // No token
@@ -26,7 +26,7 @@ function isAuthenticated() {
 
   try {
     const decodedToken = jwtDecode(token);
-    console.log("🚀 ~ isAuthenticated ~ decodedToken:", decodedToken)
+    
     const currentTime = Date.now() / 1000;
 
     if (decodedToken.exp && decodedToken.exp < currentTime) {

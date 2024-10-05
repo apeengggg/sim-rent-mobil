@@ -105,7 +105,7 @@ const { width: windowWidth } = useWindowSize()
           this.navItemsFilter = navItems.filter(item => {
             if (!item.isAdmin) return true;
 
-            // console.log("🚀 ~ setupMenu ~ filteredChildren:", filteredChildren)
+            // 
             if (item.children) {
               const filteredChildren = item.children.filter(child => !child.isAdmin);
               if (filteredChildren.length > 0) {
