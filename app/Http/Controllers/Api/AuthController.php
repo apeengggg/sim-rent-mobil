@@ -104,7 +104,7 @@ class AuthController extends Controller
                 'alamat' => 'string|required',
                 'no_telepon' => 'max:13|string|required',
                 'foto_sim_file' => 'required|file|mimes:jpg,jpeg,png,pdf|max:1024',
-                'no_sim' => 'required|string|min:16|max:16',
+                'no_sim' => 'required|digits:16|numeric',
                 'password' => 'required|string|min:8',
             ],[
                 'nama.max' => 'Nama Maximal 100 Character',
@@ -126,9 +126,8 @@ class AuthController extends Controller
                 'password.min' => 'Password Minimal 8 Character',
                 'password.string' => 'Password Must Be A String',
                 'no_sim.required' => 'No SIM Is Required',
-                'no_sim.string' => 'No SIM Must Be A String',
-                'no_sim.max' => 'No SIM Must Be 16 Character',
-                'no_sim.min' => 'No SIM Must Be 16 Character',
+                'no_sim.numeric' => 'No SIM Must Be A Number',
+                'no_sim.digits' => 'No SIM Must Be 16 Digits',
             ]);
 
             if ($validator->fails()) {

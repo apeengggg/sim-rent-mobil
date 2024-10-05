@@ -43,7 +43,7 @@ class MobilApiController extends Controller
                 'merek_mobil_id' => 'max:100|string',
                 'model' => 'max:100|string',
                 'orderBy' => 'string|required|in:merek_mobil,merek_mobil_id',
-                'dir' => 'min:3|max:3|string|in:asc,desc|required',
+                'dir' => 'min:3|max:4|string|in:asc,desc|required',
                 'perPage' => 'numeric|required',
                 'status' => 'numeric|in:1,0',
             ],[

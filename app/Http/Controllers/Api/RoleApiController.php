@@ -28,7 +28,7 @@ class RoleApiController extends Controller
                 'nip' => 'min:1|max:50|string',
                 'email' => 'string',
                 'orderBy' => 'string|required|in:user_id,role_id,nip,name,email,phone,role_name',
-                'dir' => 'min:3|max:3|string|in:asc,desc|required',
+                'dir' => 'min:3|max:4|string|in:asc,desc|required',
                 'perPage' => 'numeric|required',
                 'status' => 'numeric|in:1,0',
             ],[

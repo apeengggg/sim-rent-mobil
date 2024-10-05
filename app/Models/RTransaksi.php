@@ -16,6 +16,17 @@ class RTransaksi extends Model
         "created_at", "created_by", "updated_at", "updated_by"
     ];
 
+    public static function validateSim($transaksi_id){
+        $query = DB::table('r_transaksi as r')
+                    ->leftJoin('m_users as u', 'r.user_id', '=', 'u.user_id')
+                    ->leftJoin('m_user_datas as ud', 'ud.user_id', '=', 'u.user_id')
+                    ->select('ud.no_sim')
+                    ->where('r.transaksi_id', $transaksi_id)
+                    ->first();
+        // dd([$query, $transaksi_id]);
+        return $query;
+    }
+
     public static function getAvailabelCar($param, $paginate = true){
         $start_date = $param->tanggal_mulai;
         $end_date = $param->tanggal_selesai;
@@ -61,5 +72,25 @@ class RTransaksi extends Model
         // dd($query->toSql());
 
         return $query->first();
+    }
+
+    public static function getAllTransaction($param){
+        $query = DB::table('r_transaksi as r')
+                    ->join('m_mobils as m', 'r.mobil_id', '=', 'm.mobil_id')
+                    ->join('m_merek_mobils as mm', 'mm.merek_mobil_id', '=', 'm.merek_mobil_id')
+                    ->join('m_users as u', 'r.user_id', '=', 'u.user_id')
+                    ->select('r.transaksi_id', 'u.nama', 'm.tarif', 'm.model', 'mm.merek_mobil', 'm.no_plat', 'r.tanggal_mulai', 'r.tanggal_selesai', 'r.tanggal_kembali', 'r.total_tarif', 'r.is_return');
+        
+        if($param->no_plat){
+            $query = $query->where('m.no_plat', $param->no_plat);
+        }
+
+        if($param->transaksi_id){
+            $query = $query->where('r.transaksi_id', $param->transaksi_id);
+        }
+
+        return $query->orderBy("tanggal_mulai", $param->dir)->orderBy("is_return", $param->dir)
+                ->paginate($param->perPage);
+        
     }
 }

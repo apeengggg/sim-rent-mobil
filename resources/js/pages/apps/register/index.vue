@@ -100,6 +100,7 @@ import { themeConfig } from '@themeConfig'
                 <VTextField
                   v-model="form.no_sim"
                   label="No SIM"
+                  type="number"
                 />
               </VCol>
 

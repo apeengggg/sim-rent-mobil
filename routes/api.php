@@ -37,21 +37,19 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::middleware(['auth.filter'])->prefix('mobils')->group(function () {
-        Route::get('/', [MobilApiController::class, 'index']);
         Route::get('/combo', [MobilApiController::class, 'comboAdd']);
+        Route::get('/', [MobilApiController::class, 'index']);
+        Route::delete('/', [MobilApiController::class, 'destroy']);
         Route::get('/{id}', [MobilApiController::class, 'getById']);
         Route::post('/', [MobilApiController::class, 'store']);
         Route::post('/update', [MobilApiController::class, 'update']);
-        Route::delete('/', [MobilApiController::class, 'destroy']);
     });
 
     Route::middleware(['auth.filter'])->prefix('transaksi')->group(function () {
-        Route::get('/peminjaman', [TransaksiApiController::class, 'indexPeminjaman']);
-        Route::get('/combo', [TransaksiApiController::class, 'comboAdd']);
-        Route::get('/{id}', [TransaksiApiController::class, 'getById']);
+        Route::get('/', [TransaksiApiController::class, 'index']);
         Route::post('/', [TransaksiApiController::class, 'store']);
-        Route::post('/update', [TransaksiApiController::class, 'update']);
-        Route::delete('/', [TransaksiApiController::class, 'destroy']);
+        Route::get('/peminjaman', [TransaksiApiController::class, 'indexPeminjaman']);
+        Route::post('/pengembalian', [TransaksiApiController::class, 'update']);
     });
 
     Route::prefix('roles')->group(function () {
