@@ -454,7 +454,7 @@ import {
       }
     },
   }
-</script>Role
+</script>
 
 <style lang="scss">
 .app-user-search-filter {

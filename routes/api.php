@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\MerekMobilApiController;
 use App\Http\Controllers\Api\MobilApiController;
 use App\Http\Controllers\Api\RoleApiController;
+use App\Http\Controllers\Api\TransaksiApiController;
 use App\Http\Controllers\Api\UserApiController;
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,15 @@ Route::prefix('v1')->group(function () {
         Route::post('/', [MobilApiController::class, 'store']);
         Route::post('/update', [MobilApiController::class, 'update']);
         Route::delete('/', [MobilApiController::class, 'destroy']);
+    });
+
+    Route::middleware(['auth.filter'])->prefix('transaksi')->group(function () {
+        Route::get('/peminjaman', [TransaksiApiController::class, 'indexPeminjaman']);
+        Route::get('/combo', [TransaksiApiController::class, 'comboAdd']);
+        Route::get('/{id}', [TransaksiApiController::class, 'getById']);
+        Route::post('/', [TransaksiApiController::class, 'store']);
+        Route::post('/update', [TransaksiApiController::class, 'update']);
+        Route::delete('/', [TransaksiApiController::class, 'destroy']);
     });
 
     Route::prefix('roles')->group(function () {

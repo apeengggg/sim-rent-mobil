@@ -77,10 +77,11 @@ class AuthController extends Controller
             $results = [
                 'user_id' => $results->user_id,
                 'name' => $results->nama,
-                // 'foto_profile' => env('APP_URL').'/storage/'.$results->photo,
                 'role_id' => $results->role_id,
                 'role_name' => $results->role_name,
-                // 'permission' => $object_permission,
+                'no_sim' => $results->no_sim,
+                'alamat' => $results->alamat,
+                'telepon' => $results->telepon,
                 'token' => $this->jwtUtil->generateToken($payload_data, $results->role_id),
             ];
 

@@ -18,7 +18,8 @@ class MUsers extends Model
     public static function getUserFromUsername($username){
         return DB::table('m_users as u')
         ->join('m_roles as r', 'u.role_id', '=', 'r.role_id')
-        ->select('u.user_id', 'u.nama', 'u.username', 'u.password', 'u.role_id', 'r.role_name')
+        ->leftJoin('m_user_datas as ud', 'u.user_id', '=', 'ud.user_id')
+        ->select('u.user_id', 'u.nama', 'u.username', 'u.password', 'u.role_id', 'r.role_name', 'ud.no_sim', 'u.alamat', 'u.telepon')
         ->where('u.username', $username)
         ->first();
     } 
