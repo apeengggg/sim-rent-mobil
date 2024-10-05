@@ -1,7 +1,5 @@
-
-
 export default [
-    { heading: 'Master Mobil' },
+    { heading: 'Master Mobil', isAdmin: true },
     {
       title: 'Merek Mobil',
       to: 'apps-masters-merek',

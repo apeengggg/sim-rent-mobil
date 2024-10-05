@@ -8,7 +8,7 @@ export default [
     {
       title: 'Pengembalian',
       to: 'apps-transaction-pengembalian',
-      isAdmin: false
+      isAdmin: true
     },
   ]
   
