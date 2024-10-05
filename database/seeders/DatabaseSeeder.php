@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
             MUsersSeeder::class,
             MUserDatasSeeder::class,
             MMerekMobilsSeeder::class,
-            // MMobilsSeeder::class,
+            MMobilsSeeder::class,
             MFasilitasSeeder::class,
         ]);
     }
