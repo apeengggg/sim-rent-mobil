@@ -191,9 +191,13 @@ import {
       }
     },
     methods: {
-      handleFileChange(event){
+      clearMessage(){
         this.errorMessage = ''
+        this.successMessage = ''
+      },
+      handleFileChange(event){
         const file = event.target.files[0]
+        this.clearMessage()
         // 
 
         if(file.size > 1048576){
@@ -217,8 +221,7 @@ import {
       },
       async getFasilitasAndMerekMobil(){
         this.loading = true
-        this.errorMessage = ''
-        this.successMessage = ''
+        this.clearMessage()
         let uri = `/api/v1/mobils/combo`;
         let responseBody = await api.jsonApi(uri,'GET');
         // 
@@ -243,11 +246,10 @@ import {
       },
       async doGetById(mobil_id){
         this.loading = true
-        this.errorMessage = ''
-        this.successMessage = ''
         let uri = `/api/v1/mobils/${mobil_id}`;
         let responseBody = await api.jsonApi(uri,'GET');
         if( responseBody.status != 200 ){
+          this.clearMessage()
           this.errorMessage = responseBody.message;
         }else{
           this.body = {...responseBody.data};
@@ -261,8 +263,7 @@ import {
         if(!this.formValid){
           return
         }
-        this.errorMessage = ''
-        this.successMessage = ''
+
         Swal.fire({
           title:"Area you sure want to save this data?",
           icon: "warning",
@@ -299,12 +300,14 @@ import {
               // 
               if( responseBody.status != 200 ){
                 let msg = Array.isArray(responseBody.message) ? responseBody.message.toString() : responseBody.message;
+                this.clearMessage()
                 this.errorMessage = msg
                 window.scrollTo({
                   top: 0,
                   behavior: 'smooth' // You can also use 'auto' for instant scrolling
                 });
               }else{
+                this.clearMessage()
                 this.successMessage = responseBody.message
                 this.body = {
                   mobil_id: "",
@@ -327,6 +330,7 @@ import {
 
               }
             }catch(error){
+              this.clearMessage()
               this.errorMessage = error.message
             }
           }

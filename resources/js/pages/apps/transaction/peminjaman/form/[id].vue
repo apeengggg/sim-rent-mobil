@@ -6,7 +6,7 @@ import { VDivider } from 'vuetify/components';
 
 <template>
   <VCard>
-    <VRow>
+    <VRow class="justify-center">
       <VCol cols="12" v-if="successMessage != '' && successMessage != null">
         <VAlert color="success" variant="tonal" @click="() => this.successMessage = ''">
           {{successMessage}}
@@ -242,6 +242,8 @@ export default {
   },
   data(){
     return{
+      errorMessage: '',
+      successMessage: '',
       data: {
         transaksi_id: '',
         tanggal_mulai: '',
@@ -272,6 +274,10 @@ export default {
     }
   },
   methods: {
+    clearMessage(){
+      this.errorMessage = ''
+      this.successMessage = ''
+    },
     generateRandomStringWithDate(length) {
         const generateRandomString = (length) => {
           const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -306,8 +312,8 @@ export default {
         total_tarif: this.mobil.total_tarif_asli
       }
 
-      this.errorMessage = ''
-      this.successMessage = ''
+      this.clearMessage()
+
       Swal.fire({
         title:"Area you sure want to save this data?",
         icon: "warning",
@@ -326,9 +332,11 @@ export default {
 
             let uri = `/api/v1/transaksi`;
             let responseBody = await api.jsonApi(uri, 'POST', JSON.stringify(data));
+            console.log("🚀 ~ doSave ~ responseBody:", responseBody)
 
             if( responseBody.status != 200 ){
               let msg = Array.isArray(responseBody.message) ? responseBody.message.toString() : responseBody.message;
+              console.log("🚀 ~ doSave ~ msg:", msg)
               this.errorMessage = msg
               window.scrollTo({
                 top: 0,

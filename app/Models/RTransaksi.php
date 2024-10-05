@@ -53,7 +53,7 @@ class RTransaksi extends Model
         }
 
         if($param->mobil_id){
-            $query = $query->where('m.mobil_id', "eaea1cf9-75fb-415b-b13d-95c396912166");
+            $query = $query->where('m.mobil_id', $param->mobil_id);
             $query = $query->whereNull('r.transaksi_id');
         }
 
@@ -69,7 +69,12 @@ class RTransaksi extends Model
         if($paginate){
             return $query->paginate($param->perPage);
         }
-        // dd($query->toSql());
+
+        // $sqlWithBindings = vsprintf(
+        //     str_replace('?', "'%s'", $query->toSql()),
+        //     $query->getBindings()
+        // );
+        // dd($sqlWithBindings);
 
         return $query->first();
     }

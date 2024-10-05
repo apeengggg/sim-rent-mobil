@@ -194,8 +194,13 @@ import {
       }
     },
     methods: {
-      handleFileChange(event){
+      clearMessage(){
         this.errorMessage = ''
+        this.errorMessageList = ''
+        this.successMessage = ''
+      },
+      handleFileChange(event){
+        this.clearMessage()
         const file = event.target.files[0]
         // 
 
@@ -219,9 +224,7 @@ import {
       async getFasilitasAndMerekMobil(){
         this.loading = true
         
-        this.errorMessage = ''
-        this.successMessage = ''
-        this.errorMessageList = ''
+        this.clearMessage()
 
         let uri = `/api/v1/mobils/combo`;
         let responseBody = await api.jsonApi(uri,'GET');
@@ -245,27 +248,12 @@ import {
         this.body.merek_mobil_id = ''
         this.body.status = ''
       },
-      // async doGetById(merek_mobil_id){
-      //   this.isEdit = true
-      //   this.loading = true
-
-      //   let uri = `/api/v1/merek-mobils/${merek_mobil_id}`;
-      //   let responseBody = await api.jsonApi(uri,'GET');
-      //   if( responseBody.status != 200 ){
-      //     this.errorMessageList = responseBody.message;
-      //   }else{
-      //     this.body = {...responseBody.data};
-      //     this.body.switchToggle = this.body.status == 1 ? true : false
-      //     
-      //   }
-      // },
       async doAdd(){
         if(!this.formValid){
           return
         }
-        this.errorMessage = ''
-        this.errorMessageList = ''
-        this.successMessage = ''
+
+        this.clearMessage()
 
         Swal.fire({
           title:"Area you sure want to save this data?",
@@ -332,9 +320,7 @@ import {
       async doSave(){
         this.loading = true
 
-        this.errorMessageList = ''
-        this.errorMessage = ''
-        this.successMessage = ''
+        this.clearMessage()
 
         let formData = new FormData()
         formData.append("merek_mobil_id", this.body.merek_mobil_id)

@@ -183,7 +183,6 @@ class MobilApiController extends Controller
                 'description' => $request->description,
                 'tarif' => $request->tarif,
                 'foto' => $base64_file,
-                'is_rent' => 2,
                 'status' => 1,
                 'created_by' => $request->attributes->get('user_id')
             ];
@@ -305,7 +304,6 @@ class MobilApiController extends Controller
                 'warna' => $request->warna,
                 'description' => $request->description,
                 'tarif' => $request->tarif,
-                'is_rent' => 2,
                 'status' => 1,
                 'created_by' => $request->attributes->get('user_id')
             ];
@@ -353,7 +351,9 @@ class MobilApiController extends Controller
                 return ResponseUtil::BadRequest('Mobil Tidak Ditemukan!');
             }
 
-            if($mobil->is_rent == 1){
+            $cek_rent = MMobils::getTransactionByMobilId($request->mobil_id);
+            // dd($cek_rent);
+            if($cek_rent->is_return == 0){
                 return ResponseUtil::BadRequest('Mobil Sedang Masa Penyewaan!');
             }
             

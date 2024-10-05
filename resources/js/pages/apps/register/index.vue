@@ -192,7 +192,12 @@ export default {
     }
   },
   methods: {
+    clearMessage(){
+      this.errorMessage = ''
+      this.successMessage = ''
+    },
     handleFileUpload(e){
+      this.clearMessage()
       const file = e.target.files[0];
       
       if(file.size > 1048576){
@@ -211,8 +216,7 @@ export default {
     async doSave(event){
       this.loading = true
 
-      this.successMessage = ''
-      this.errorMessage = ''
+      this.clearMessage()
 
       if(this.form.password != this.form.confirmation_password){
         this.errorMessage = 'Password dan konfirmasi password tidak cocok'

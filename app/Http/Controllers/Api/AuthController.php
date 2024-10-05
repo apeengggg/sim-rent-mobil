@@ -37,12 +37,12 @@ class AuthController extends Controller
         try{
             $validator = Validator::make($request->all(), [
                 'username' => 'required|string',
-                'password' => 'required|string|min:5'
+                'password' => 'required|string|min:8'
             ],[
                 'username.required' => 'Username is Required',
                 'password.required' => 'Password is Required',
                 'password.string' => 'Password Must Be String',
-                'password.min' => 'Password Must Be At Least 5 Character'
+                'password.min' => 'Password Must Be At Least 8 Character'
             ]);
     
             //Send failed response if request is not valid
@@ -53,12 +53,12 @@ class AuthController extends Controller
 
             $results = MUsers::getUserFromUsername($request->username);
             if($results == null){
-                return ResponseUtil::Unauthorized("Login Gagal, Mungkin Karena Data Tidak Terdaftar Dalam Sistem, Atau Password Salah");
+                return ResponseUtil::BadRequest("Login Gagal, Mungkin Karena Data Tidak Terdaftar Dalam Sistem, Atau Password Salah");
             }
             
             $compare = Hash::check($request->password, $results->password);
             if(!$compare){
-                return ResponseUtil::Unauthorized("Login Gagal, Mungkin Karena Data Tidak Terdaftar Dalam Sistem, Atau Password Salah");
+                return ResponseUtil::BadRequest("Login Gagal, Mungkin Karena Data Tidak Terdaftar Dalam Sistem, Atau Password Salah");
             }
             
             // $permission = MPermissions::getPermissionById($results->role_id);

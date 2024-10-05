@@ -256,6 +256,10 @@ const isCardDetailsVisible = ref(false)
       }
     },
     methods: {
+      clearMessage(){
+        this.errorMessage = ''
+        this.successMessage = ''
+      },
       doPeminjamanForm(mobil_id, mobil){
         const tanggal_peminjaman = this.tanggal_peminjaman.split('to')
         const tanggal_mulai = tanggal_peminjaman[0].trim()
@@ -274,6 +278,7 @@ const isCardDetailsVisible = ref(false)
         }
       },
       async doGetMerekMobil(){
+        this.clearMessage()
         let uri = `/api/v1/mobils/combo`;
         let responseBody = await api.jsonApi(uri,'GET');
         if( responseBody.status != 200 ){
@@ -285,6 +290,9 @@ const isCardDetailsVisible = ref(false)
       },
       async doSearch(page){
         this.loading = true
+
+        this.clearMessage()
+
         let param = `orderBy=${this.orderBy}&dir=${this.dir}&perPage=${this.page.pageSize}&page=${page}&tanggal_mulai=${this.param_query.tanggal_mulai}&tanggal_selesai=${this.param_query.tanggal_selesai}`
 
         if(this.param_query.merek_mobil_id != "" && this.param_query.merek_mobil_id != null){

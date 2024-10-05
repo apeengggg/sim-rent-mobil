@@ -8,7 +8,7 @@
           <!-- 👉 Filters -->
           <VCardText>
             <VRow>
-                <VCol cols="12" v-if="successMessage != ''">
+                <VCol cols="12">
                   <VAlert v-if="successMessage != '' && successMessage != null" color="success" variant="tonal" @click="() => this.successMessage = ''">
                     {{successMessage}}
                   </VAlert>
@@ -41,18 +41,6 @@
                   placeholder="Name"
                   density="compact"
                   v-on:keyup.enter="doSearch(1)"
-                />
-              </VCol>
-              <VCol
-                cols="12"
-                sm="4"
-              >
-                <VSelect
-                  v-model="param_query.is_rent"
-                  label="Filter Tersedia"
-                  :items="filterRent"
-                  clearable
-                  clear-icon="tabler-x"
                 />
               </VCol>
             </VRow>
@@ -113,9 +101,6 @@
                   TARIF
                 </th>
                 <th scope="col">
-                  TERSEDIA
-                </th>
-                <th scope="col">
                   ACTIONS
                 </th>
               </tr>
@@ -166,17 +151,6 @@
                 <td>
                   <span class="text-capitalize text-base">{{ mobil.tarif }}</span>
                 </td>
-                <td>
-                  <VChip
-                    label
-                    :color="resolveUserStatusVariant(mobil.is_rent)"
-                    size="small"
-                    class="text-capitalize"
-                  >
-                    {{ mobil.is_rent == 1 ? 'Tidak Tersedia' : 'Tersedia'}}
-                  </VChip>
-                </td>
-
                 <td
                   class="text-center"
                   style="width: 5rem;"
@@ -272,7 +246,6 @@
         param_query: {
           merek_mobil_id: '',
           model: '',
-          is_rent: '',
         },
         body: {
           merek_mobil: '',
@@ -318,9 +291,6 @@
       'param_query.merek_mobil_id'(){
         this.doSearch(1)
       },
-      'param_query.is_rent'(){
-        this.doSearch(1)
-      }
     },
     computed: {
       paginationData(){
@@ -331,18 +301,21 @@
       }
     },
     methods: {
-      async doGetMerekMobil(){
-        this.loading = true
-
+      clearMessage(){
         this.errorMessage = ''
         this.successMessage = ''
+      },
+      async doGetMerekMobil(){
+        this.loading = true
 
         let uri = `/api/v1/mobils/combo`;
         let responseBody = await api.jsonApi(uri,'GET');
         if( responseBody.status != 200 ){
           let msg = Array.isArray(responseBody.message) ? responseBody.message.toString() : responseBody.message;
+          this.clearMessage()
           this.errorMessage = msg
         }else{
+          this.clearMessage()
           this.merek_mobil = responseBody.data.merek_mobil
         }
         this.loading = false
@@ -362,9 +335,6 @@
       async doSearch(page){
         this.loading = true
 
-        this.errorMessage = ''
-        this.successMessage = ''
-
         let param = `orderBy=${this.orderBy}&dir=${this.dir}&perPage=${this.page.pageSize}&page=${page}&status=${this.selectedStatus == null ? 1 : this.selectedStatus}`
 
         if(this.param_query.merek_mobil_id != "" && this.param_query.merek_mobil_id != null){
@@ -375,15 +345,12 @@
           param += `&model=${this.param_query.model}`
         }
 
-        if(this.param_query.is_rent != "" && this.param_query.is_rent != null){
-          param += `&is_rent=${this.param_query.is_rent}`
-        }
-
         let uri = `/api/v1/mobils?${param}`;
         let responseBody = await api.jsonApi(uri,'GET');
         // 
         if( responseBody.status != 200 ){
           let msg = Array.isArray(responseBody.message) ? responseBody.message.toString() : responseBody.message;
+          this.clearMessage()
           this.errorMessage = msg
         }else{
           this.data = responseBody.data.data;
@@ -407,9 +374,6 @@
         }
       },
       async doDelete(mobil_id){
-        this.errorMessage = ''
-        this.successMessage = ''
-
         Swal.fire({
           title: "Are you sure?",
           text: "You won't be able to revert this!",
@@ -429,8 +393,14 @@
             let responseBody = await api.jsonApi(uri,'DELETE',JSON.stringify({mobil_id: mobil_id}));
             if( responseBody.status != 200 ){
               let msg = Array.isArray(responseBody.message) ? responseBody.message.toString() : responseBody.message;
+              console.log("🚀 ~ doDelete ~ msg:", msg)
+              
+              this.clearMessage()
               this.errorMessage = msg
+              console.log("🚀 ~ doDelete ~ this.errorMessage:", this.errorMessage)
             }else{
+              
+              this.clearMessage()
               this.successMessage = responseBody.message
             }
             this.loading = false

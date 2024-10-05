@@ -11,7 +11,7 @@ class MMobils extends Model
     use HasFactory;
     protected $primaryKey = "mobil_id";
     protected $fillable = [
-        "mobil_id", "merek_mobil_id", "model", "no_plat", "warna", "description", "tarif", "is_rent", "status", "foto",
+        "mobil_id", "merek_mobil_id", "model", "no_plat", "warna", "description", "tarif", "status", "foto",
         "created_at", "created_by", "updated_at", "updated_by"
     ];
 
@@ -41,6 +41,14 @@ class MMobils extends Model
                 ->where("mobil_id", $mobil_id)->first();
     }
 
+    public static function getTransactionByMobilId($mobil_id){
+        return DB::table("r_transaksi as r")
+                ->select("r.transaksi_id", "r.is_return")
+                ->where("r.mobil_id", $mobil_id)
+                ->where("r.is_return", 0)
+                ->first();
+    }
+
     public static function getAll($param){
         $query = DB::table('m_mobils as m')
             ->select('m.*', 'mm.merek_mobil')
@@ -53,10 +61,6 @@ class MMobils extends Model
 
         if($param->model){
             $query = $query->whereRaw('LOWER(m.model) LIKE ?', ['%' . strtolower($param->model) . '%']);
-        }
-
-        if($param->is_rent){
-            $query = $query->where('m.is_rent', (int)$param->is_rent);
         }
 
         if($param->orderBy){

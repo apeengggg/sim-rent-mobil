@@ -406,6 +406,12 @@ import {
       }
     },
     methods: {
+      clearMessage(){
+        this.errorMessage = ''
+        this.successMessage = ''
+        this.errorMessageModal = ''
+        this.successMessageModal = ''
+      },
       cancelUpdate(){
         this.isDialogVisible = false
         this.modal = {
@@ -424,11 +430,7 @@ import {
         }
       },
       async doSave(){
-        this.errorMessage = ''
-        this.successMessage = ''
-        this.errorMessageModal = ''
-        this.successMessageModal = ''
-
+        this.clearMessage()
         if(this.modal.no_sim == ''){
           this.errorMessageModal = 'No Sim Is Required'
         }
@@ -519,6 +521,7 @@ import {
         
         if( responseBody.status != 200 ){
           let msg = Array.isArray(responseBody.message) ? responseBody.message.toString() : responseBody.message;
+          this.clearMessage()
           this.errorMessage = msg
           this.loading = false
         }else{
@@ -542,8 +545,6 @@ import {
                 maximumFractionDigits: 0
             }).format(obj.total_tarif);
           })
-
-          
 
           this.page.totalRecords= responseBody.data.total
           this.page.totalPages= responseBody.data.last_page

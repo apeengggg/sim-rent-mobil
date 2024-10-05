@@ -21,7 +21,6 @@ class MMobils extends Migration
             $table->string('warna', 12);
             $table->text('description');
             $table->integer('tarif');
-            $table->integer('is_rent');
             $table->integer('status');
             $table->text('foto');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));

@@ -62,7 +62,7 @@ const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
         </VCardText>
         <VCardText>
           <VRow>
-            <VCol cols="12" v-if="successMessage != ''">
+            <VCol cols="12">
               <VAlert v-if="successMessage != '' && successMessage != null" color="success" variant="tonal" @click="() => this.successMessage = ''">
                 {{successMessage}}
               </VAlert>
@@ -165,14 +165,18 @@ export default {
     }
   },
   methods: {
+    clearMessage(){
+      this.errorMessage = ''
+      this.successMessage = ''
+    },
     async login(){
       this.loading = true
-      this.errorMessage = ''
       let uri = `/api/v1/auth/login`;
       let responseBody = await api.jsonApi(uri,'POST', JSON.stringify(this.form));
       // 
       if( responseBody.status != 200 ){
         let msg = ''
+        this.clearMessage()
         if(Array.isArray(responseBody.message)){
           msg = responseBody.message.toString()
         }else{

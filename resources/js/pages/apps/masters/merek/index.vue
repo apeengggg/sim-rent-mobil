@@ -20,7 +20,7 @@ import {
         <VCard title="Tambah Merek Mobil">
           <VCardText>
             <VRow class="justify-end">
-              <VCol cols="12" v-if="successMessage != ''">
+              <VCol cols="12">
                 <VAlert v-if="successMessage != '' && successMessage != null" color="success" variant="tonal" @click="() => this.successMessage = ''">
                   {{successMessage}}
                 </VAlert>
@@ -311,6 +311,11 @@ import {
       }
     },
     methods: {
+      clearMessage(){
+        this.errorMessage = ''
+        this.errorMessageList = ''
+        this.successMessage = ''
+      },
       cancelEdit(){
         this.isEdit = false; 
         this.body.merek_mobil = ''; 
@@ -320,24 +325,18 @@ import {
       async doGetById(merek_mobil_id){
         this.isEdit = true
         this.loading = true
-        this.errorMessageList = ''
-        this.successMessage = ''
-        this.errorMessage = ''
-
+        
         let uri = `/api/v1/merek-mobils/${merek_mobil_id}`;
         let responseBody = await api.jsonApi(uri,'GET');
         if( responseBody.status != 200 ){
+          this.clearMessage()
           this.errorMessageList = responseBody.message;
         }else{
           this.body = {...responseBody.data};
           this.body.switchToggle = this.body.status == 1 ? true : false
-          // 
         }
       },
       async doAdd(){
-        this.errorMessage = ''
-        this.successMessage = ''
-        this.errorMessageList = ''
         Swal.fire({
           title:"Area you sure want to save this data?",
           icon: "warning",
@@ -359,8 +358,10 @@ import {
               let responseBody = await api.jsonApi(uri, method, JSON.stringify(this.body));
               if( responseBody.status != 200 ){
                 let msg = Array.isArray(responseBody.message) ? responseBody.message.toString() : responseBody.message;
+                this.clearMessage()
                 this.errorMessage = msg
               }else{
+                this.clearMessage()
                 this.successMessage = responseBody.message
                 this.doSearch(1)
                 this.isEdit = false
@@ -384,6 +385,7 @@ import {
         let responseBody = await api.jsonApi(uri,'GET');
         // 
         if( responseBody.status != 200 ){
+          this.clearMessage()
           this.errorMessageList = responseBody.message;
         }else{
           this.data = responseBody.data.data;
@@ -393,38 +395,6 @@ import {
           this.page.pageNo= responseBody.data.current_page
           this.page.pageSize= responseBody.data.per_page
         }
-      },
-      async doDelete(user_id){
-        Swal.fire({
-          title: "Are you sure?",
-          text: "You won't be able to revert this!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonColor: "#7367F0",
-          cancelButtonColor: "#EA5455",
-          confirmButtonText: "Yes, delete it!",
-          customClass: {
-            confirmButton: 'confirm-button-text-white',
-            cancelButton: 'confirm-button-text-white'
-          }
-      }).then(async (result) => {
-          if (result.isConfirmed) {
-          //   this.loading = true
-          //   let uri = `/api/v1/users`;
-          //   let responseBody = await api.jsonApi(uri,'DELETE',JSON.stringify({userId: user_id}));
-            
-          //   if( responseBody.status != 200 ){
-          //     this.infoMessage = '';
-          //     this.warningMessage = '';
-          //     this.errorMessage = responseBody.message;
-          //   }else{
-          //     Swal.fire('Deleted!', responseBody.message, 'success')
-          //   }
-          //   this.loading = false
-          //   this.doSearch(1)
-          }
-        })
-          
       },
       resolveUserStatusVariant(stat){
         if(stat == 1){
