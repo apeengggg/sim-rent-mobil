@@ -361,7 +361,7 @@ import {
         this.loading = false
       },
       doGetById(mobil_id){
-
+        this.$router.push(`/apps/masters/mobil/form/${mobil_id}`)
       },
       doAdd(){
         this.$router.push('/apps/masters/mobil/form')

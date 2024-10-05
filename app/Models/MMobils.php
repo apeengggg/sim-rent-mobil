@@ -25,12 +25,20 @@ class MMobils extends Model
                 ]);
     }
 
-    public static function getMobilFromNoPlat($no_plat){
-        return DB::table("m_mobils")->where("no_plat", $no_plat)->first();
+    public static function getMobilFromNoPlat($no_plat, $is_edit = false, $mobil_id = null){
+        $query = DB::table("m_mobils")->where("no_plat", $no_plat);
+        if($is_edit){
+            $query = $query->where("mobil_id", "<>", $mobil_id);
+        }
+
+        return $query = $query->first();
     }
 
     public static function getMobilByMobilId($mobil_id){
-        return DB::table("m_mobils")->where("mobil_id", $mobil_id)->first();
+        return DB::table("m_mobils as m")
+                ->select("m.*", "mm.merek_mobil")
+                ->leftJoin('m_merek_mobils as mm', 'mm.merek_mobil_id', '=', 'm.merek_mobil_id')
+                ->where("mobil_id", $mobil_id)->first();
     }
 
     public static function getAll($param){
