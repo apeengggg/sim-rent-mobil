@@ -28,7 +28,7 @@ class MUsersSeeder extends Seeder
                 'created_by' => 'SYS',
             ],
             [
-                'user_id' => 'f57b21f9-f3d6-4958-b265-82175d160e6j',
+                'user_id' => 'af361200-53be-4e06-b911-41ff2fb98487',
                 'role_id' => 'd57b21f9-f3d6-4958-b265-82175d160e6c',
                 'nama' => 'User',
                 'username' => 'user',

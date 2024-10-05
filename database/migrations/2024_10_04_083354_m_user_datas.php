@@ -12,7 +12,7 @@ class MUserDatas extends Migration
         Schema::create('m_user_datas', function (Blueprint $table) {
             $table->string('user_data_id', 100)->primary();
             $table->string('no_sim', 100)->unique();
-            $table->text('foto_sim');
+            $table->longtext('foto_sim');
             $table->string('user_id', 100);
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('created_by', 100);

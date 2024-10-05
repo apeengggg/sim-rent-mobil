@@ -22,7 +22,7 @@ class MMobils extends Migration
             $table->text('description');
             $table->integer('tarif');
             $table->integer('status');
-            $table->text('foto');
+            $table->longtext('foto');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('created_by', 100);
             $table->timestamp('updated_at')->nullable();
