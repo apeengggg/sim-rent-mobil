@@ -146,7 +146,7 @@ const isCardDetailsVisible = ref(false)
           </VRow>
         </VCardText>
         <VCardText v-else>
-          <VRow>
+          <VRow class="justify-center text-center">
             <VCol cols="12">
               <span>Pilih tanggal terlebih dahulu</span>
             </VCol>
