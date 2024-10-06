@@ -73,6 +73,7 @@ import { VDivider } from 'vuetify/components';
             <AppDateTimePicker
               v-model="data.tanggal_mulai"
               density="compact"
+              readonly
               placeholder="DD-MM-YYYY"
               style="width: 8.9rem;"
               :config="{ dateFormat: 'd-m-Y', position: 'auto right' }"
@@ -90,7 +91,8 @@ import { VDivider } from 'vuetify/components';
               density="compact"
               placeholder="DD-MM-YYYY"
               style="width: 8.9rem;"
-              :config="{ dateFormat: 'd-m-Y', position: 'auto right' }"
+              readonly
+              :config="{ dateFormat: 'd-m-Y', position: 'auto right', disable: [{ from: data.tanggal_mulai, to: '2024-10-12' }] }"
             />
           </span>
         </p>
@@ -199,9 +201,6 @@ import Swal from 'sweetalert2'
 import api from "@/apis/CommonAPI"
 
 export default {
-  // unmounted(){
-  //   localStorage.removeItem('mobil_pinjaman')
-  // },
   mounted(){
     let user_data = JSON.parse(localStorage.getItem('user_data'))
     let mobil_data = JSON.parse(localStorage.getItem('mobil_pinjaman'))
@@ -237,8 +236,6 @@ export default {
     }).format(this.mobil.total_tarif_asli);
 
     this.data.transaksi_id = this.generateRandomStringWithDate(5)
-    
-    
   },
   data(){
     return{
