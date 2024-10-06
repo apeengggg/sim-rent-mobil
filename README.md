@@ -10,6 +10,11 @@ NPM 10.8.2
 5. setup db in .env
 6. php artisan migrate --seed
 
+Untuk menjalankan aplikasi
+1. npm run dev
+2. php artisan serve
+
+
 ADMIN:
     username: admin
     password: admin123
