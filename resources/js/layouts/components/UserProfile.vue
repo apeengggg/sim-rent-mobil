@@ -86,7 +86,7 @@ const logout = () => {
           <VDivider class="my-2" />
 
           <!-- 👉 Profile -->
-          <VListItem :to="{ name: 'apps-profile-id', params: { id: user_data.user_id } }">
+          <!-- <VListItem :to="{ name: 'apps-profile-id', params: { id: user_data.user_id } }">
             <template #prepend>
               <VIcon
                 class="me-2"
@@ -96,7 +96,7 @@ const logout = () => {
             </template>
 
             <VListItemTitle>Profile</VListItemTitle>
-          </VListItem>
+          </VListItem> -->
 
           <!-- Divider -->
           <VDivider class="my-2" />
