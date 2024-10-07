@@ -8,7 +8,8 @@ NPM 10.8.2
 3. php artisan key:generate
 4. npm install --legacy-peer-deps
 5. setup db in .env
-6. php artisan migrate --seed
+6. setup app_url (php server & port, example: http://localhost:8000) in .env
+7. php artisan migrate --seed
 
 Untuk menjalankan aplikasi
 1. npm run dev
